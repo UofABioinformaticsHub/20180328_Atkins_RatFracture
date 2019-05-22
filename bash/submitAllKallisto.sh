@@ -8,10 +8,10 @@ TRIMDATA=${PROJROOT}/1_trimmedData
 mkdir -p ${PROJROOT}/3_kallisto
 
 ## Fire off the alignments
-FQ=$(ls ${TRIMDATA}/fastq/*R1.fastq.gz 
+FQ=$(ls ${TRIMDATA}/fastq/*R1.fastq.gz)
 echo -e "Found:\n\t${FQ}"
 
 for F1 in ${FQ}
 	do 
-	sbatch ${PROJROOT}/bash/kallisto.sh ${F1}
+	sbatch ${PROJROOT}/bash/singleKallisto.sh ${F1}
 done

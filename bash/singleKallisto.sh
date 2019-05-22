@@ -31,7 +31,6 @@ F1=$1
 OUTDIR=${ALIGNDATA}/$(basename ${F1%_R1.fastq.gz})
 echo -e "Creating ${OUTDIR}"
 mkdir -p ${OUTDIR}
-OUTBAM=${OUTDIR}/$(basename ${F1%_R1.fastq.gz}.bam)
 
 echo -e "Currently aligning:\n\t${F1}"
 echo -e "Output will be written to ${OUTDIR}"
