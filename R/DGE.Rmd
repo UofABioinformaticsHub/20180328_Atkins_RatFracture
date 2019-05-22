@@ -23,6 +23,7 @@ library(scales)
 library(GenomicRanges)
 library(rtracklayer)
 library(plyranges)
+library(ggrepel)
 theme_set(theme_bw())
 ```
 
@@ -62,7 +63,7 @@ starLogs %>%
 	dplyr::select(Filename, contains("Number")) %>% 
 	dplyr::select(Filename, contains("Mapped")) %>% 
 	gather("Type", "Total", -Filename) %>% 
-	mutate(Filename = str_remove(Filename, "_F_.+"),
+	mutate(Filename = str_remove(Filename, "_CB2Y.+"),
 		   Type = str_remove(Type, "Number_Of_Reads_"),
 		   Type = str_remove(Type, "_Reads_Number")) %>% 
 	ggplot(aes(Filename, Total, fill = Type)) + 
@@ -76,6 +77,11 @@ starLogs %>%
 counts <- list.files("../3_kallisto/", full.names = TRUE) %>% 
 	catchKallisto()
 ```
+
+```{r}
+targets <- read_csv("targets.csv")
+```
+
 
 After summarisation the library sizes ranged between `r pander(comma(range(colSums(counts$counts))))`
 
@@ -110,7 +116,7 @@ geneDGE <- counts$counts %>%
 	rownames_to_column("transcript_id") %>%
 	as_tibble() %>%
 	set_colnames(basename(colnames(.))) %>%
-	set_colnames(str_remove(colnames(.),"_F_.+")) %>%
+	set_colnames(str_remove(colnames(.),"_CB2Y.+")) %>%
 	mutate(transcript_id = str_remove(transcript_id, "\\.[0-9]+")) %>%
 	gather(Sample, Count, -transcript_id) %>%
 	left_join(trans2Gene) %>%
@@ -120,13 +126,119 @@ geneDGE <- counts$counts %>%
 	dplyr::filter(grepl("ENSRNOG", gene_id)) %>%
 	as.data.frame() %>% 
 	column_to_rownames("gene_id") %>% 
-	.[rowSums(cpm(.) > 1) > 3,] %>%
+	.[rowSums(cpm(.) > 2) >= 3,] %>%
 	DGEList() %>%
 	calcNormFactors()
+geneDGE$samples %<>%
+	mutate(Rat = rownames(.)) %>%
+	left_join(targets) %>%
+	set_rownames(.$Rat)
+geneDGE$genes <- geneGR %>%
+	magrittr::set_names(mcols(.)$gene_id) %>%
+	.[rownames(geneDGE)]
 ```
 
 ```{r}
-geneDGE %>% plotMDS()
+voomData <- voomWithQualityWeights(geneDGE)
 ```
 
+
+```{r}
+pca <- geneDGE %>%
+	cpm(log = TRUE) %>%
+	t() %>%
+	prcomp()
+summary(pca)
+```
+
+```{r}
+plotly::ggplotly(pca$x %>%
+	cbind(voomData$targets[rownames(.),]) %>%
+	ggplot(aes(PC1, PC2, colour = Group, label = Rat)) +
+	geom_point(aes(size = sample.weights)) +
+	labs(x = paste0("PC1 (", percent(summary(pca)$importance["Proportion of Variance", "PC1"]), ")"),
+		 y = paste0("PC2 (", percent(summary(pca)$importance["Proportion of Variance", "PC2"]), ")")) +
+	theme(legend.position = "none"))
+```
+
+```{r}
+results <- voomData %>%
+	lmFit(design = model.matrix(~Group, data = .$targets)) %>%
+	eBayes() %>%
+	topTable(n = Inf) %>%
+	set_colnames(str_remove(colnames(.),"ID.")) %>%
+	mutate(Location = paste(seqnames, ":", start, "-", end, ":(", strand, ")", sep = "")) %>%
+	dplyr::select(ID = gene_id,
+				  Name = gene_name,
+				  logFC, AveExpr, t, P.Value, 
+				  FDR = adj.P.Val,
+				  Location) %>%
+	arrange(P.Value)
+```
+
+```{r}
+head(results, 10) %>%
+	pander(split.tables = Inf, 
+		   caption = "Top ranked genes")
+```
+
+
+```{r}
+thresh <- 0.15
+results %>%
+	mutate(Sig = FDR < 0.05) %>%
+	ggplot(aes(AveExpr, logFC, colour = Sig)) +
+	geom_point() +
+	geom_text_repel(aes(label = Name),
+					data = . %>% filter(FDR < thresh)) +
+	scale_colour_manual(values = c(rgb(0.5,0.5,0.5,0.5), "red")) +
+	theme(legend.position = "none")
+```
+
+```{r}
+results %>%
+	mutate(Sig = FDR < 0.05) %>%
+	ggplot(aes(logFC, -log10(P.Value), colour = Sig)) +
+	geom_point() +
+	geom_text_repel(aes(label = Name),
+					data = . %>% filter(FDR < thresh)) +
+	scale_colour_manual(values = c(rgb(0.5,0.5,0.5,0.5), "red")) +
+	theme(legend.position = "none")
+```
+
+```{r}
+gnLabeller <- as_labeller(structure(geneGR$gene_name, names = geneGR$gene_id))
+```
+
+
+```{r, fig.cap=paste("Genes to an FDR of", percent(thresh))}
+cpm(voomData, log = TRUE) %>%
+	.[dplyr::filter(results, FDR < thresh)$ID,] %>%
+	as.data.frame() %>%
+	rownames_to_column("ID") %>%
+	gather(Rat, logCPM, -ID) %>%
+	left_join(targets) %>%
+	ggplot(aes(Group, logCPM, colour = Group)) +
+	geom_jitter(width = 0.1) +
+	facet_wrap(~ID, labeller = gnLabeller)
+```
+
+
+```{r, fig.cap = "Genes up to an FDR of 20\\%"}
+cpm(voomData, log = TRUE) %>%
+	.[dplyr::filter(results, FDR > thresh, FDR < 0.2)$ID,] %>%
+	as.data.frame() %>%
+	rownames_to_column("ID") %>%
+	gather(Rat, logCPM, -ID) %>%
+	left_join(targets) %>%
+	ggplot(aes(Group, logCPM, colour = Group)) +
+	geom_jitter(width = 0.1) +
+	facet_wrap(~ID, labeller = gnLabeller)
+```
+
+# Session Info
+
+```{r}
+pander(sessionInfo())
+```
 
