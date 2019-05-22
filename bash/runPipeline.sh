@@ -2,7 +2,7 @@
 #SBATCH -p batch
 #SBATCH -N 1
 #SBATCH -n 16
-#SBATCH --time=24:00:00
+#SBATCH --time=12:00:00
 #SBATCH --mem=48GB
 #SBATCH -o /data/biohub/20180328_Atkins_RatFracture/slurm/%x_%j.out
 #SBATCH -e /data/biohub/20180328_Atkins_RatFracture/slurm/%x_%j.err
@@ -102,17 +102,17 @@ for R1 in ${TRIMDATA}/fastq/*R1.fastq.gz
         --genomeDir ${REFS}/star \
         --readFilesIn ${R1} \
         --readFilesCommand gunzip -c \
-        --outFileNamePrefix ${ALIGNDATA}/bams/${BNAME} \
+        --outFileNamePrefix ${ALIGNDATA}/bam/${BNAME} \
         --outSAMtype BAM SortedByCoordinate
 
   done
 
 # Move the log files into their own folder
-mv ${ALIGNDATA}/bams/*out ${ALIGNDATA}/log
-mv ${ALIGNDATA}/bams/*tab ${ALIGNDATA}/log
+mv ${ALIGNDATA}/bam/*out ${ALIGNDATA}/log
+mv ${ALIGNDATA}/bam/*tab ${ALIGNDATA}/log
 
 # Fastqc and indexing
-for BAM in ${ALIGNDATA}/bams/*.bam
+for BAM in ${ALIGNDATA}/bam/*.bam
  do
    fastqc -t ${CORES} -f bam_mapped -o ${ALIGNDATA}/FastQC --noextract ${BAM}
    samtools index ${BAM}
@@ -124,10 +124,10 @@ for BAM in ${ALIGNDATA}/bams/*.bam
 ##--------------------------------------------------------------------------------------------##
 
 ## Feature Counts - obtaining all sorted bam files
-sampleList=`find ${ALIGNDATA}/bams -name "*out.bam" | tr '\n' ' '`
+sampleList=`find ${ALIGNDATA}/bam -name "*out.bam" | tr '\n' ' '`
 
 ## Running featureCounts on the sorted bam files
-${featureCounts} -Q 10 \
+featureCounts -Q 10 \
   -s 2 \
   --fracOverlap 1 \
   -T ${CORES} \
@@ -139,13 +139,3 @@ cut -f1,7- ${ALIGNDATA}/featureCounts/counts.out | \
 sed 1d > ${ALIGNDATA}/featureCounts/genes.out
 
 
-##--------------------------------------------------------------------------------------------##
-## kallisto 
-##--------------------------------------------------------------------------------------------##
-
-## Just submit these as independent jobs at this point as we don't need to do any
-## post alignment QC now
-for R1 in ${TRIMDATA}/fastq/*R1.fastq.gz
-  do
-  	sbatch ${PROJROOT}/bash/kallistoSingle.sh ${R1}
-  done
