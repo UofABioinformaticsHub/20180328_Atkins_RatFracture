@@ -1,0 +1,12 @@
+Status	/data/biohub/20180328_Atkins_RatFracture/2_alignedData/bam/188_F_CB2YGANXX_TTAGGC_L001Aligned.sortedByCoord.out.bam	/data/biohub/20180328_Atkins_RatFracture/2_alignedData/bam/179_F_CB2YGANXX_ATCACG_L001Aligned.sortedByCoord.out.bam	/data/biohub/20180328_Atkins_RatFracture/2_alignedData/bam/192_F_CB2YGANXX_ACAGTG_L001Aligned.sortedByCoord.out.bam	/data/biohub/20180328_Atkins_RatFracture/2_alignedData/bam/190_F_CB2YGANXX_TGACCA_L001Aligned.sortedByCoord.out.bam	/data/biohub/20180328_Atkins_RatFracture/2_alignedData/bam/187_F_CB2YGANXX_CGATGT_L001Aligned.sortedByCoord.out.bam	/data/biohub/20180328_Atkins_RatFracture/2_alignedData/bam/194_F_CB2YGANXX_GCCAAT_L001Aligned.sortedByCoord.out.bam
+Assigned	4868319	7138780	8277624	12611630	12587895	14729011
+Unassigned_Ambiguity	60802	75488	64622	98830	116917	91103
+Unassigned_MultiMapping	0	0	0	0	0	0
+Unassigned_NoFeatures	20252717	12728478	16929654	13020746	9393399	14298040
+Unassigned_Unmapped	0	0	0	0	0	0
+Unassigned_MappingQuality	45685449	128375404	45927475	49575352	119140895	41368577
+Unassigned_FragmentLength	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0
+Unassigned_Secondary	0	0	0	0	0	0
+Unassigned_Nonjunction	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0
