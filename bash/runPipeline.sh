@@ -42,7 +42,7 @@ TRIMDATA=${PROJROOT}/1_trimmedData
 
 ## Setup for genome alignment
 ALIGNDATA=${PROJROOT}/2_alignedData
-
+mkdir ${ALIGNDATA}/featureCounts
 
 ##--------------------------------------------------------------------------------------------##
 ## FastQC on the raw data 
