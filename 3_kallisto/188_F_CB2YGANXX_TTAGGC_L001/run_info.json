@@ -1,0 +1,9 @@
+{
+	"n_targets": 31715,
+	"n_bootstraps": 50,
+	"n_processed": 39450243,
+	"kallisto_version": "0.43.1",
+	"index_version": 10,
+	"start_time": "Wed May 22 18:20:46 2019",
+	"call": "kallisto quant -b 50 --single --rf-stranded -l 300 -s 20 -i /data/biorefs/reference_genomes/ensembl-release-96/rattus_norvegicus/kallisto/Rattus_norvegicus.Rnor_6.0.cdna.all.idx -o /data/biohub/20180328_Atkins_RatFracture/3_kallisto/188_F_CB2YGANXX_TTAGGC_L001 /data/biohub/20180328_Atkins_RatFracture/1_trimmedData/fastq/188_F_CB2YGANXX_TTAGGC_L001_R1.fastq.gz"
+}
