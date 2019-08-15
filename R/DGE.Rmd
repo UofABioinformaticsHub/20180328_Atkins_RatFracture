@@ -28,12 +28,16 @@ library(ggrepel)
 library(fgsea)
 library(parallel)
 library(grid)
+```
+
+```{r opts}
+if (interactive()) setwd(here::here("R"))
 theme_set(theme_bw())
 ```
 
 ```{r rawFqc}
 rawFqc <- list.files("../0_rawData/FastQC", pattern = "zip", full.names = TRUE) %>%
-	getFastqcData()
+	FastqcDataList()
 ```
 
 
@@ -59,7 +63,8 @@ plotGcContent(rawFqc, plotType = "line", theoreticalGC = TRUE, theoreticalType =
 ```
 
 ```{r plotDup, fig.cap = "*Estimated duplication levels within each sample. Higher than expected sequence duplication rates were observed, particularly for sequences present greater than 10,000 times. Sample 179_F and 187_F were of particular concern, however this is also suggestive of incomplete rRNA removal*"}
-Sequence_Duplication_Levels(rawFqc) %>%
+rawFqc %>%
+	getModule("Sequence_Duplication") %>%
 	mutate(Duplication_Level = factor(Duplication_Level, levels = unique(Duplication_Level)),
 		   Filename = str_extract(Filename, "[0-9]+_F")) %>%
 	ggplot(aes(Duplication_Level, Percentage_of_total, colour = Filename)) +
@@ -74,7 +79,7 @@ starLogs <- list.files(
 	path = "../2_alignedData/log/",
 	pattern = "final.out",
 	full.names = TRUE) %>%
-	importStarLogs()
+	importNgsLogs(type = "star")
 ```
 
 ```{r plotAlignments, fig.cap = "*STAR Alignment summary showing very low levels of unique alignments, which is again suggestive of incomplete rRNA removal. Uniquely mapping reads are within the range usually seen after summarising to genes, indicating that final gene-level counts may be a little lower than is optimal.*", fig.width=8}
@@ -98,7 +103,7 @@ starLogs %>%
 - As a result, low-expressed genes will be removed to avoid false positives.
 
 ```{r counts, results='hide'}
-counts <- list.files("../3_kallisto/", full.names = TRUE) %>% 
+counts <- list.files("../3_kallisto", full.names = TRUE) %>% 
 	catchKallisto()
 ```
 
@@ -213,8 +218,13 @@ pca$x %>%
 
 ### Differentially Expressed Genes
 
+```{r}
+tau <- 1.2
+```
+
+
 Differentially expressed (DE) genes were detected using a slight variation from the common null hypothesis.
-Instead of testing $H_0: \log FC = 0$ which tests for the point value zero, the null hypothesis was defined as being within the range [$-\tau, \tau$], with $\tau$ set at the default value of $\log_2 1.2$.
+Instead of testing $H_0: \log FC = 0$ which tests for the point value zero, the null hypothesis was defined as being within the range [$-\tau, \tau$], with $\tau$ set at the default value of $\log_2 `r tau`$.
 This additionally saves filtering any detected DE genes based on fold-change, as is common practice in many workflows.
 
 $$
@@ -228,7 +238,7 @@ results <- voomData %>%
 	lmFit(design = model.matrix(~Group, data = .$targets)) %>%
 	# eBayes() %>%
 	# topTable(n = Inf) %>%
-	treat() %>%
+	treat(lfc = log2(tau)) %>%
 	topTreat(n = Inf, coef = "GroupDiabetic") %>%
 	set_colnames(str_remove(colnames(.),"ID.")) %>%
 	mutate(Location = paste(seqnames, ":", start, "-", end, ":(", strand, ")", sep = "")) %>%
