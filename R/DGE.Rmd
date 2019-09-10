@@ -33,6 +33,7 @@ library(grid)
 ```{r opts}
 if (interactive()) setwd(here::here("R"))
 theme_set(theme_bw())
+nCores <- min(detectCores() - 1, 12)
 ```
 
 ```{r rawFqc}
@@ -234,11 +235,10 @@ H_A: |\log FC| > \tau
 $$
 
 ```{r results}
-results <- voomData %>%
+treatFit <- voomData %>%
 	lmFit(design = model.matrix(~Group, data = .$targets)) %>%
-	# eBayes() %>%
-	# topTable(n = Inf) %>%
-	treat(lfc = log2(tau)) %>%
+	treat(lfc = log2(tau)) 
+results <- treatFit %>%
 	topTreat(n = Inf, coef = "GroupDiabetic") %>%
 	set_colnames(str_remove(colnames(.),"ID.")) %>%
 	mutate(Location = paste(seqnames, ":", start, "-", end, ":(", strand, ")", sep = "")) %>%
@@ -261,12 +261,15 @@ thresh <- 0.2
 ```{r top10Table}
 results %>%
 	dplyr::filter(FDR < thresh) %>%
-	pander(split.tables = Inf, 
-		   caption = paste0("Top ", 
-		   				nrow(.), 
-		   				" most highly-ranked genes when sorting by p-value. ", "
-		   				This represents an FDR of up to ", percent(thresh), ".",
-		   				"logFC > 0 indicates up regulation in diabetic samples relative to control"))
+	pander(
+		split.tables = Inf, 
+		caption = paste0(
+			"Top ", nrow(.), 
+			" most highly-ranked genes when sorting by p-value. ",
+			"This represents an FDR of up to ", percent(thresh), ".",
+			"logFC > 0 indicates up regulation in diabetic samples relative to control"
+		)
+	)
 ```
 
 
@@ -302,7 +305,7 @@ gnLabeller <- geneGR$gene_name %>%
 
 
 ```{r plotCPM, fig.cap=paste0("*Expression values for genes to an FDR of ", percent(thresh), ". Genes are shown in order of significance. Jitter has been added to the x-axis*"), fig.width=8, fig.height=8}
-cpm(voomData, log = TRUE) %>%
+voomData$E %>%
 	.[dplyr::filter(results, FDR < thresh)$ID,] %>%
 	as.data.frame() %>%
 	rownames_to_column("ID") %>%
@@ -313,6 +316,33 @@ cpm(voomData, log = TRUE) %>%
 	geom_jitter(width = 0.1) +
 	facet_wrap(~ID, labeller = gnLabeller) +
 	theme(legend.position = "none")
+```
+
+```{r}
+treatFit$genes %<>%
+	as.data.frame() %>%
+	mutate(
+		location = paste0(seqnames, ":", start, "-", end, ":", strand)
+	) %>%
+	dplyr::select(location, gene_name, gene_biotype, gene_id) %>%
+	column_to_rownames("gene_id") 
+```
+
+```{r, eval=FALSE}
+treatFit %>%
+	Glimma::glMDPlot(
+		counts = geneDGE$counts %>% floor %>% cpm(),
+		groups = geneDGE$samples$Group,
+		status = decideTests(., p.value = thresh)[,2],
+		main = "Diabetic Vs Non-Diabetic Fractures",
+		xlab = "Average Expression (logCPM)",
+		ylab = "logFC",
+		side.ylab = "Counts Per Million (CPM)",
+		sample.cols = geneDGE$samples$Group %>% 
+			as.factor() %>%
+			as.integer(),
+		jitter = 10
+)
 ```
 
 
@@ -369,7 +399,7 @@ hallmark <- gmtPathways("gmt/h.all.v6.2.entrez.gmt") %>%
 
 
 ```{r testHallmark}
-hallmarkRes <- fgsea(hallmark, idRankedByT, nperm=np, nproc = 12) %>%
+hallmarkRes <- fgsea(hallmark, idRankedByT, nperm=np, nproc = nCores) %>%
 	as_tibble() %>%
 	dplyr::rename(FDR = padj) %>%
 	mutate(adjP = p.adjust(pval, "bonferroni")) %>%
@@ -424,13 +454,13 @@ c2 <- gmtPathways("gmt/c2.all.v6.2.entrez.gmt") %>%
 			dplyr::filter(Entrez %in% x, 
 						  ID %in% rownames(geneDGE)) %>%
 			.[["ID"]]
-	}, mc.cores = 12)
+	}, mc.cores = nCores)
 ```
 
 As this was a larger database of gene-sets, only those with between 15 & 500 genes were tested.
 
 ```{r testC2}
-c2Res <- fgsea(c2, idRankedByT, nperm=np, minSize = 15, maxSize = 500, nproc = 12) %>%
+c2Res <- fgsea(c2, idRankedByT, nperm=np, minSize = 15, maxSize = 500, nproc = nCores) %>%
 	as_tibble() %>%
 	dplyr::rename(FDR = padj) %>%
 	mutate(adjP = p.adjust(pval, "bonferroni")) %>%
@@ -487,12 +517,12 @@ c5 <- gmtPathways("gmt/c5.all.v6.2.entrez.gmt") %>%
 			dplyr::filter(Entrez %in% x, 
 						  ID %in% rownames(geneDGE)) %>%
 			.[["ID"]]
-	}, mc.cores = 12)
+	}, mc.cores = nCores)
 ```
 
 
 ```{r testC5}
-c5Res <- fgsea(c5, idRankedByT, nperm=np, minSize = 15, maxSize = 200, nproc = 12) %>%
+c5Res <- fgsea(c5, idRankedByT, nperm=np, minSize = 15, maxSize = 200, nproc = nCores) %>%
 	as_tibble() %>%
 	dplyr::rename(FDR = padj) %>%
 	mutate(adjP = p.adjust(pval, "bonferroni")) %>%
@@ -548,12 +578,12 @@ c7 <- gmtPathways("gmt/c7.all.v6.2.entrez.gmt") %>%
 			dplyr::filter(Entrez %in% x, 
 						  ID %in% rownames(geneDGE)) %>%
 			.[["ID"]]
-	}, mc.cores = 12)
+	}, mc.cores = nCores)
 ```
 
 
 ```{r testC7}
-c7Res <- fgsea(c7, idRankedByT, nperm=np, minSize = 15, maxSize = 500, nproc = 12) %>%
+c7Res <- fgsea(c7, idRankedByT, nperm=np, minSize = 15, maxSize = 500, nproc = nCores) %>%
 	as_tibble() %>%
 	dplyr::rename(FDR = padj) %>%
 	mutate(adjP = p.adjust(pval, "bonferroni")) %>%
