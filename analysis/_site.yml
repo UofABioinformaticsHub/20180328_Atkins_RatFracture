@@ -1,0 +1,17 @@
+name: "20180328_Atkins_RatFracture"
+output_dir: ../docs
+navbar:
+  title: "20180328_Atkins_RatFracture"
+  left:
+  - text: Home
+    href: index.html
+  - text: About
+    href: about.html
+  - text: License
+    href: license.html
+output:
+  workflowr::wflow_html:
+    toc: yes
+    toc_float: yes
+    theme: cosmo
+    highlight: textmate
