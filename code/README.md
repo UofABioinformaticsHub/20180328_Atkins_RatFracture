@@ -1,3 +1,1 @@
-# Code
-
-Save command-line scripts and shared R code here.
+I keep all my bash scripts used in data processing in this folder

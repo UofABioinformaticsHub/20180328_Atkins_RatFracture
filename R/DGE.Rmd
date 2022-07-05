@@ -33,7 +33,7 @@ library(grid)
 ```{r opts}
 if (interactive()) setwd(here::here("R"))
 theme_set(theme_bw())
-nCores <- min(detectCores() - 1, 12)
+nCores <- 6
 ```
 
 ```{r rawFqc}
@@ -399,7 +399,7 @@ hallmark <- gmtPathways("gmt/h.all.v6.2.entrez.gmt") %>%
 
 
 ```{r testHallmark}
-hallmarkRes <- fgsea(hallmark, idRankedByT, nperm=np, nproc = nCores) %>%
+hallmarkRes <- fgsea(hallmark, idRankedByT, nproc = nCores) %>%
 	as_tibble() %>%
 	dplyr::rename(FDR = padj) %>%
 	mutate(adjP = p.adjust(pval, "bonferroni")) %>%
@@ -460,7 +460,8 @@ c2 <- gmtPathways("gmt/c2.all.v6.2.entrez.gmt") %>%
 As this was a larger database of gene-sets, only those with between 15 & 500 genes were tested.
 
 ```{r testC2}
-c2Res <- fgsea(c2, idRankedByT, nperm=np, minSize = 15, maxSize = 500, nproc = nCores) %>%
+c2Res <- fgsea(c2, idRankedByT, minSize = 15, maxSize = 500, nproc = nCores)
+%>%
 	as_tibble() %>%
 	dplyr::rename(FDR = padj) %>%
 	mutate(adjP = p.adjust(pval, "bonferroni")) %>%
