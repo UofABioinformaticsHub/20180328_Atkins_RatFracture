@@ -1,7 +1,7 @@
-Rat,Group
-179_F,Diabetic
-187_F,Diabetic
-188_F,Diabetic
-190_F,Control
-192_F,Control
-194_F,Control
+Rat,group,File
+179_F,Diabetic,179_F_CB2YGANXX_ATCACG
+187_F,Diabetic,187_F_CB2YGANXX_CGATGT
+188_F,Diabetic,188_F_CB2YGANXX_TTAGGC
+190_F,Control,190_F_CB2YGANXX_TGACCA
+192_F,Control,192_F_CB2YGANXX_ACAGTG
+194_F,Control,194_F_CB2YGANXX_GCCAAT

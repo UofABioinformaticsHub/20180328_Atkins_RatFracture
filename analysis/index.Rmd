@@ -8,4 +8,48 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+```{r setup}
+knitr::opts_chunk$set(
+	message = FALSE, warning = FALSE,
+	fig.height = 8, fig.width = 10
+)
+```
+
+
+```{r packages}
+library(tidyverse)
+library(pander)
+```
+
+```{r samples}
+suffix <- "_L001_R1.fastq.gz"
+samples <- read_csv(
+	here::here("data/targets.csv")
+) %>% 
+  mutate(File = paste0(File, suffix))
+```
+
+
+## Introduction
+
+This is a simple analysis of Single-End, Total RNA-Seq data associated with bone fractures in the diabetic rat model.
+Samples are as follows.
+
+```{r tbl-samples}
+pander(
+	samples,
+	justify = "lll",
+	caption = "Samples included for RNA-Seq analysis."
+)
+```
+
+The primary workflow is to trim the data, then align and count reads in a gene-specific manner.
+The genome build used was `Rnor_6.0` with gene annotations derived from Ensembl Release 96.
+
+Tool versions used were:
+
+- AdapterRemoval v2.2.1
+- FastQC v0.11.7
+- STAR v2.7.0
+- Subread v1.5.2
+

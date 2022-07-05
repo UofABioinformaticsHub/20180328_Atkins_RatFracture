@@ -35,13 +35,13 @@ fi
 PROJROOT=/data/biohub/20180328_Atkins_RatFracture
 
 ## Directories for Initial FastQC
-RAWDATA=${PROJROOT}/0_rawData
+RAWDATA=${PROJROOT}/data/0_rawData
 
 ## Setup for Trimmed data
-TRIMDATA=${PROJROOT}/1_trimmedData
+TRIMDATA=${PROJROOT}/data/1_trimmedData
 
 ## Setup for genome alignment
-ALIGNDATA=${PROJROOT}/2_alignedData
+ALIGNDATA=${PROJROOT}/data/2_alignedData
 mkdir ${ALIGNDATA}/featureCounts
 
 ##--------------------------------------------------------------------------------------------##
