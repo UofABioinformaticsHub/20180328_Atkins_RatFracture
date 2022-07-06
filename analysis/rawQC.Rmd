@@ -58,7 +58,7 @@ rawFqc <- here::here("data/0_rawData/FastQC") %>%
   .[fqName(.) %in% samples$Filename]
 ```
 
-```{r plotSummary, fig.height=fh, fig.cap = "*Overall summary of FastQC reports*"}
+```{r plotSummary, fig.cap = "*Overall summary of FastQC reports*"}
 plotSummary(rawFqc, pattern = pattern)
 ```
 

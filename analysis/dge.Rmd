@@ -20,20 +20,23 @@ knitr::opts_chunk$set(
 
 ```{r packages}
 library(tidyverse)
-library(yaml)
 library(scales)
 library(pander)
 library(glue)
 library(edgeR)
 library(AnnotationHub)
 library(ensembldb)
+library(GenomicRanges)
 library(magrittr)
-library(cqn)
 library(cowplot)
 library(matrixStats)
 library(broom)
 library(ggrepel)
 library(statmod)
+library(msigdbr)
+library(fgsea)
+library(reactable)
+library(htmltools)
 ```
 
 ```{r options}
@@ -43,6 +46,9 @@ theme_set(theme_bw())
 suffix <- "_L001"
 pattern <- paste0("_CB2YGANXX_.+fastq.gz")
 sp <- "Rnorvegicus"
+with_tooltip <- function(value, width = 30) {
+  tags$span(title = value, str_trunc(value, width))
+}
 ```
 
 
@@ -67,7 +73,6 @@ group_cols <- hcl.colors(
 
 # Setup
 
-## Annotations
 
 ```{r ah}
 ah <- AnnotationHub() %>%
@@ -81,14 +86,12 @@ transGR <- transcripts(ensDb) %>%
 ```
 
 Gene annotations were again loaded from Ensembl Release `r ensemblVersion(ensDb)`.
-The [previously defined](alnQC.html#Annotation_Setup) `GenomicRanges` object containing GC content and Gene Length was also loaded,
-containing information for `r comma(length(genesGR))` genes.
 
 ## Count Data
 
 Prior to filtering for undetectable genes, counts were loaded as a `DGEList`, incorporating both sample and gene metadata.
 
-# Normalisation
+# Data Processing and Analysis {.tabset}
 
 ```{r genes2keep}
 min_cpm <- 2
@@ -117,18 +120,15 @@ results <- voomData %>%
   mutate(DE = FDR < 0.05)
 ```
 
+Taking the initial set of `r comma(nrow(dge))` genes, low expression genes were removed, retaining only the `r comma(sum(genes2Keep))` genes where `r min_cpm` or more reads per million (i.e. CPM) were detected in 3 or more samples.
 
-Counts were normalised using the `voom` approach allowing for individual sample-weights.
-These were initially estimated by considering each sample to be drawn from the same treatment group.
-Tests for differential expression were then performed using these weights, with genes being considered as DE if receiving an FDR-adjusted p-value < 0.05.
+Counts were then normalised using `voom` precision weights, allowing for individual sample-weights.
+For a conservative approach, sample-weights were estimated by considering each sample to be drawn from the same treatment group.
+Tests for differential expression were then performed voom precision weights, with genes being considered as Differentially Expressed (DE) if receiving an FDR-adjusted p-value < 0.05.
 The standard `eBayes()` methodology was used, setting `robust = TRUE` to protect against highly variable genes.
 
-## Before Normalisation {.tabset}
 
-Genes were defined as detected if exceeding `r min_cpm`CPM in at least 3 samples, leading to
-`r comma(sum(genes2Keep))` genes being retained as confidently expressed prior to normalisation.
-
-### Density Plots
+## Density Plots
 
 ```{r plot-density-all, fig.cap = "Distributions of logCPM values for all non-zero genes, and those retained as detected using the above CPM threshold. The number of genes in each category is also shown."}
 list(
@@ -137,7 +137,7 @@ list(
     mutate(which = "All Genes"),
   Detected = voomData$E %>% 
     as.data.frame() %>% 
-    mutate(which = "Detected Genes")
+    mutate(which = "Detected (Retained) Genes")
 ) %>% 
   bind_rows() %>% 
   pivot_longer(
@@ -156,23 +156,25 @@ list(
     data = . %>% 
       group_by(which) %>% 
       summarise(
-        x = 0.85*max(logCPM),
-        y = 0.85*max(density(logCPM)$y),
+        x = 0.90*max(logCPM),
+        y = 0.95*max(density(logCPM)$y),
         lab = glue("n = {comma(n() / ncol(dge))}"),
         .groups = "drop"
       ) %>% 
       mutate(y = max(y)),
     inherit.aes = FALSE
-  )+
+  ) +
+  geom_vline(xintercept = log2(min_cpm), linetype = 2) +
   scale_colour_manual(values = group_cols) +
+  scale_y_continuous(expand = expansion(c(0, 0.05))) +
   labs(
     y = "Density", colour = "Group"
   )
 ```
 
-### RLE
+## RLE
 
-```{r plot-rle-pre, fig.cap = "Relative Log Expression. Any deviations from zero indicate potential batch effects."}
+```{r plot-rle-pre, fig.cap = "Relative Log Expression. Any deviations from zero indicate potential batch effects, with none being evident."}
 voomData$E %>%
   as.data.frame() %>% 
   pivot_longer(
@@ -192,9 +194,9 @@ voomData$E %>%
 ```
 
 
-### PCA
+## PCA
 
-```{r plot-pca-post, fig.cap = "PCA on CQ-normalised logCPM values. The clear impact of the smaller libraries is seen with library size being the lragest source of variability. This supports the previous caution that the libraries below 10m reads are not as representative of the true RNA content of the source material. The small final library size after assigning reads to genes also highlights the poor performance of total RNA in this context given that all raw sequencing libraries were >35 million reads."}
+```{r plot-pca-post, fig.cap = "PCA on logCPM values. The clear impact of the smaller libraries is seen with library size being the lragest source of variability. This supports the previous caution that the libraries below 10m reads are not as representative of the true RNA content of the source material. The small final library size after assigning reads to genes also highlights the poor performance of total RNA in this context, given that all raw sequencing libraries were >35 million reads."}
 pcaPost <- voomData$E %>%
   .[rowVars(.) > 0,] %>% 
   t() %>%
@@ -220,7 +222,7 @@ pcaPost %>%
   )
 ```
 
-### Sample Weights
+## Sample Weights
 
 ```{r plotWeights, fig.cap = "Sample weights after fitting the voom model."}
 voomData$targets %>% 
@@ -231,8 +233,12 @@ voomData$targets %>%
 ```
 
 
-# Results
+# Results {.tabset}
 
+Or the genes retained as confidently detected, `r sum(results$DE)` were formally considered as DE, using an FDR of 0.05.
+These were `r pander(dplyr::filter(results, DE)$gene_name)`.
+
+## MA Plot
 
 ```{r ma-plot, fig.cap = "MA-plot showing all genes with an FDR < 0.1. Those passing the FDR threshold of 0.05 are highlighted in red."}
 results %>%
@@ -250,7 +256,9 @@ results %>%
   theme(legend.position = "none")
 ```
 
-```{r volcano-plot}
+## Volcano Plot
+
+```{r volcano-plot, fig.cap = "Volcano plot with genes labelled to an FDR of 0.1. DE genes to an FDR threshold of 0.05 are highlighted in red."}
 results %>%
   ggplot(aes(logFC, -log10(P.Value))) +
   geom_point(aes(colour = DE),alpha = 0.5) +
@@ -262,5 +270,755 @@ results %>%
     show.legend = FALSE
   ) +
   scale_colour_manual(values = c("grey50", "red")) +
-  theme(legend.position = "none")
+  theme(legend.position = "none") +
+  labs(y = expression(paste(-log[10], "p")))
+```
+
+## Highly Ranked Genes
+
+```{r plot-highly-ranked, fig.cap = "The most highly ranked genes for differential expression. Those formally passing the criteria for differential expression (FDR < 0.05) are marked with an asterisk."}
+results %>% 
+  dplyr::slice(1:12) %>% 
+  mutate(
+    gene_name = case_when(
+      DE ~ paste0(gene_name, "*"),
+      TRUE ~ gene_name
+    )
+  ) %>% 
+  dplyr::select(gene_id, gene_name) %>% 
+  bind_cols(
+    voomData[.$gene_id,]$E
+  ) %>% 
+  pivot_longer(
+    cols = all_of(samples$Rat),
+    names_to = "Rat", values_to = "logCPM"
+  ) %>% 
+  left_join(
+    dplyr::select(voomData$targets, Rat, group, sample.weights)
+  ) %>% 
+  mutate(gene_name = fct_inorder(gene_name)) %>% 
+  ggplot(
+    aes(group, logCPM, fill = group)
+  ) +
+  geom_boxplot() +
+  geom_hline(yintercept = log2(min_cpm), linetype = 2, colour = "grey30") +
+  facet_wrap(~gene_name) +
+  labs(x = "Group", fill = "Group")
+```
+
+# Enrichment Analysis {.tabset}
+
+```{r msigdb}
+rankedGenes <- results %>% 
+  arrange(t) %>% 
+  with(
+    structure(t, names = gene_id)
+  )
+msigdb <- msigdbr(species = "Rattus norvegicus") %>% 
+  dplyr::filter(
+    gs_cat %in% c("H", "C5") | 
+      gs_subcat %in% c("CP:KEGG", "CP:REACTOME", "CP:WIKIPATHWAYS", "IMMUNESIGDB")
+  ) %>% 
+  dplyr::filter(ensembl_gene %in% names(rankedGenes)) 
+gsByPathway <- msigdb %>% 
+  split(.$gs_name) %>% 
+  lapply(pull, "ensembl_gene") %>% 
+  .[vapply(., length, integer(1)) > 5]
+id2Name <- structure(
+  genesGR$gene_name,
+  names = genesGR$gene_id
+) %>% 
+  .[!duplicated(names(.))]
+```
+
+
+Given the low number of differentially expressed genes, GSEA was used as implemented in the R package `fgsea`, with the ranked list of genes generated using the t-statistics as obtained above.
+
+Enrichment analysis was performed on gene-sets obtained from MSigDB version 7.5.
+Gene sets were selected from HALLMARK, KEGG, REACTOME, WIkiPathways, ImmuneSigDB and the Gene Ontology Database.
+Only the `r comma(length(gsByPathway))` gene-sets with more than 5 genes detected in the dataset were retained.
+P-values obtained from GSEA were adjusted using Bonferroni's method to ensure strong control of the Family-Wise Error Rate (FWER).
+
+```{r gsea-results}
+gseaResults <- fgsea(gsByPathway, rankedGenes) %>% 
+  arrange(pval) %>% 
+  mutate(padj = p.adjust(pval, "bonf")) %>% 
+  dplyr::select(gs_name = pathway, pval, padj, NES, size, leadingEdge) %>% 
+  left_join(
+    distinct(msigdb, gs_name, gs_cat, gs_subcat)
+  )
+```
+
+## HALLMARK Gene Sets {.tabset}
+
+### Results
+
+```{r gsea-hallmark}
+df <- gseaResults %>% 
+  dplyr::filter(gs_cat == "H", padj < 0.05) %>% 
+  mutate(
+    leSize = vapply(leadingEdge, length, integer(1)),
+   leadingEdge = vapply(
+     leadingEdge,
+     function(x) paste(id2Name[x], collapse = "; "),
+     character(1)
+   ) 
+  ) %>% 
+  dplyr::select(gs_name, pval, padj, NES, ends_with("size"), leadingEdge) 
+htmltools::tags$caption(
+  htmltools::em(
+    glue(
+      "
+      All {nrow(df)} HALLMARK gene sets considered to be enriched in the ranked 
+      list of genes. 
+      All p-values are Bonferroni-adjusted. A Normalised Enrichment Score 
+      (NES) > 0 indicates that the geneset was enriched amongst 
+      up-regulated genes, whilst a negative NES indicates enrichment in the 
+      down-regulated genes. Genes in the Leading Edge represent those which
+      appear in the ranked list up until the point of the most extreme NES.
+      "
+    )
+  )
+)
+df %>% 
+  reactable(
+    searchable = TRUE, filterable = TRUE,
+    columns = list(
+      gs_name = colDef(
+        name = "Gene Set",
+        cell = function(value) str_replace_all(value, "_", " ")
+      ),
+      pval = colDef(show = FALSE),
+      padj = colDef(
+        name = "p<sub>adj</sub>", html = TRUE,
+        cell = function(value) {
+          fmt <- "%.2e"
+          if (value > 0.001) fmt <- "%.3f"
+          sprintf(fmt, value)
+        },
+        maxWidth = 100
+      ),
+      NES = colDef(
+        format = colFormat(digits = 2),
+        maxWidth = 80
+      ),
+      size = colDef(name = "Gene Set Size", maxWidth = 100),
+      leSize = colDef(name = "Leading Edge Size", maxWidth = 100),
+      leadingEdge = colDef(
+        name = "Leading Edge",
+        cell = function(value) with_tooltip(value, width = 50)
+      )
+    )
+  )
+```
+
+### Plots
+
+```{r plot-hallmark-barcodes, fig.cap = "Enrichment plots for the most highly ranked HALLMARK gene-sets, showing the approximate position within the ranked list where the maximal enrichment score is found. The most compelling results will always be associated with maximal enrichment scores near either extreme."}
+p <- df %>% 
+  dplyr::slice(1:9) %>% 
+  pull("gs_name") %>% 
+  lapply(
+    function(x) {
+      plotEnrichment(gsByPathway[[x]], rankedGenes) +
+        ggtitle(
+          str_replace_all(x, "_", " ") %>% 
+            str_trunc(40)
+        ) +
+        ylim(0.62 * c(-1, 1)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 10))
+    }
+  )
+plot_grid(plotlist = p)
+```
+
+## Reactome Gene Sets {.tabset}
+
+### Results
+
+```{r gsea-reactome}
+df <- gseaResults %>% 
+  dplyr::filter(gs_subcat == "CP:REACTOME", padj < 0.05) %>% 
+  mutate(
+    leSize = vapply(leadingEdge, length, integer(1)),
+   leadingEdge = vapply(
+     leadingEdge,
+     function(x) paste(id2Name[x], collapse = "; "),
+     character(1)
+   ) 
+  ) %>% 
+  dplyr::select(gs_name, pval, padj, NES, ends_with("size"), leadingEdge) 
+htmltools::tags$caption(
+  htmltools::em(
+    glue(
+      "
+      All {nrow(df)} Reactome gene sets considered to be enriched in the ranked 
+      list of genes. 
+      All p-values are Bonferroni-adjusted. A Normalised Enrichment Score 
+      (NES) > 0 indicates that the geneset was enriched amongst 
+      up-regulated genes, whilst a negative NES indicates enrichment in the 
+      down-regulated genes. Genes in the Leading Edge represent those which
+      appear in the ranked list up until the point of the most extreme NES.
+      "
+    )
+  )
+)
+df %>% 
+  reactable(
+    searchable = TRUE, filterable = TRUE,
+    columns = list(
+      gs_name = colDef(
+        name = "Gene Set",
+        cell = function(value) str_replace_all(value, "_", " ")
+      ),
+      pval = colDef(show = FALSE),
+      padj = colDef(
+        name = "p<sub>adj</sub>", html = TRUE,
+        cell = function(value) {
+          fmt <- "%.2e"
+          if (value > 0.001) fmt <- "%.3f"
+          sprintf(fmt, value)
+        },
+        maxWidth = 100
+      ),
+      NES = colDef(
+        format = colFormat(digits = 2),
+        maxWidth = 80
+      ),
+      size = colDef(name = "Gene Set Size", maxWidth = 100),
+      leSize = colDef(name = "Leading Edge Size", maxWidth = 100),
+      leadingEdge = colDef(
+        name = "Leading Edge",
+        cell = function(value) with_tooltip(value, width = 50)
+      )
+    )
+  )
+```
+
+### Plots
+
+```{r plot-reactome-barcodes, fig.cap = "Enrichment plots for the most highly ranked Reactome gene-sets, showing the approximate position within the ranked list where the maximal enrichment score is found. The most compelling results will always be associated with maximal enrichment scores near either extreme."}
+p <- df %>% 
+  dplyr::slice(1:9) %>% 
+  pull("gs_name") %>% 
+  lapply(
+    function(x) {
+      plotEnrichment(gsByPathway[[x]], rankedGenes) +
+        ggtitle(
+          str_replace_all(x, "_", " ") %>% 
+            str_trunc(40)
+        ) +
+        ylim(0.6 * c(-1, 1)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 10))
+    }
+  )
+plot_grid(plotlist = p)
+```
+
+
+## KEGG Gene Sets {.tabset}
+
+### Results
+
+```{r gsea-kegg}
+df <- gseaResults %>% 
+  dplyr::filter(gs_subcat == "CP:KEGG", padj < 0.05) %>% 
+  mutate(
+    leSize = vapply(leadingEdge, length, integer(1)),
+   leadingEdge = vapply(
+     leadingEdge,
+     function(x) paste(id2Name[x], collapse = "; "),
+     character(1)
+   ) 
+  ) %>% 
+  dplyr::select(gs_name, pval, padj, NES, ends_with("size"), leadingEdge) 
+htmltools::tags$caption(
+  htmltools::em(
+    glue(
+      "
+      All {nrow(df)} KEGG gene sets considered to be enriched in the ranked 
+      list of genes. 
+      All p-values are Bonferroni-adjusted. A Normalised Enrichment Score 
+      (NES) > 0 indicates that the geneset was enriched amongst 
+      up-regulated genes, whilst a negative NES indicates enrichment in the 
+      down-regulated genes. Genes in the Leading Edge represent those which
+      appear in the ranked list up until the point of the most extreme NES.
+      "
+    )
+  )
+)
+df %>% 
+  reactable(
+    searchable = TRUE, filterable = TRUE,
+    columns = list(
+      gs_name = colDef(
+        name = "Gene Set",
+        cell = function(value) str_replace_all(value, "_", " ")
+      ),
+      pval = colDef(show = FALSE),
+      padj = colDef(
+        name = "p<sub>adj</sub>", html = TRUE,
+        cell = function(value) {
+          fmt <- "%.2e"
+          if (value > 0.001) fmt <- "%.3f"
+          sprintf(fmt, value)
+        },
+        maxWidth = 100
+      ),
+      NES = colDef(
+        format = colFormat(digits = 2),
+        maxWidth = 80
+      ),
+      size = colDef(name = "Gene Set Size", maxWidth = 100),
+      leSize = colDef(name = "Leading Edge Size", maxWidth = 100),
+      leadingEdge = colDef(
+        name = "Leading Edge",
+        cell = function(value) with_tooltip(value, width = 50)
+      )
+    )
+  )
+```
+
+### Plots
+
+```{r plot-kegg-barcodes, fig.cap = "Enrichment plots for the most highly ranked KEGG gene-sets, showing the approximate position within the ranked list where the maximal enrichment score is found. The most compelling results will always be associated with maximal enrichment scores near either extreme."}
+p <- df %>% 
+  dplyr::slice(1:9) %>% 
+  pull("gs_name") %>% 
+  lapply(
+    function(x) {
+      plotEnrichment(gsByPathway[[x]], rankedGenes) +
+        ggtitle(
+          str_replace_all(x, "_", " ") %>% 
+            str_trunc(40)
+        ) +
+        ylim(0.62 * c(-1, 1)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 10))
+    }
+  )
+plot_grid(plotlist = p)
+```
+
+
+## WIKIPATHWAYS Gene Sets {.tabset}
+
+### Results
+
+```{r gsea-wp}
+df <- gseaResults %>% 
+  dplyr::filter(gs_subcat == "CP:WIKIPATHWAYS", padj < 0.05) %>% 
+  mutate(
+    leSize = vapply(leadingEdge, length, integer(1)),
+   leadingEdge = vapply(
+     leadingEdge,
+     function(x) paste(id2Name[x], collapse = "; "),
+     character(1)
+   ) 
+  ) %>% 
+  dplyr::select(gs_name, pval, padj, NES, ends_with("size"), leadingEdge) 
+htmltools::tags$caption(
+  htmltools::em(
+    glue(
+      "
+      All {nrow(df)} WIKIPATHWAYS gene sets considered to be enriched in the 
+      ranked list of genes. 
+      All p-values are Bonferroni-adjusted. A Normalised Enrichment Score 
+      (NES) > 0 indicates that the geneset was enriched amongst 
+      up-regulated genes, whilst a negative NES indicates enrichment in the 
+      down-regulated genes. Genes in the Leading Edge represent those which
+      appear in the ranked list up until the point of the most extreme NES.
+      "
+    )
+  )
+)
+df %>% 
+  reactable(
+    searchable = TRUE, filterable = TRUE,
+    columns = list(
+      gs_name = colDef(
+        name = "Gene Set",
+        cell = function(value) str_replace_all(value, "_", " ")
+      ),
+      pval = colDef(show = FALSE),
+      padj = colDef(
+        name = "p<sub>adj</sub>", html = TRUE,
+        cell = function(value) {
+          fmt <- "%.2e"
+          if (value > 0.001) fmt <- "%.3f"
+          sprintf(fmt, value)
+        },
+        maxWidth = 100
+      ),
+      NES = colDef(
+        format = colFormat(digits = 2),
+        maxWidth = 80
+      ),
+      size = colDef(name = "Gene Set Size", maxWidth = 100),
+      leSize = colDef(name = "Leading Edge Size", maxWidth = 100),
+      leadingEdge = colDef(
+        name = "Leading Edge",
+        cell = function(value) with_tooltip(value, width = 50)
+      )
+    )
+  )
+```
+
+### Plots
+
+```{r plot-wp-barcodes, fig.cap = "Enrichment plots for the most highly ranked WIKIPATHWAYS gene-sets, showing the approximate position within the ranked list where the maximal enrichment score is found. The most compelling results will always be associated with maximal enrichment scores near either extreme."}
+p <- df %>% 
+  dplyr::slice(1:9) %>% 
+  pull("gs_name") %>% 
+  lapply(
+    function(x) {
+      plotEnrichment(gsByPathway[[x]], rankedGenes) +
+        ggtitle(
+          str_replace_all(x, "_", " ") %>% 
+            str_trunc(40)
+        ) +
+        ylim(0.9 * c(-1, 1)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 10))
+    }
+  )
+plot_grid(plotlist = p)
+```
+
+
+## ImmunSigDB Gene Sets {.tabset}
+
+### Results
+
+```{r gsea-immune}
+df <- gseaResults %>% 
+  dplyr::filter(gs_subcat == "IMMUNESIGDB", padj < 0.05) %>% 
+  mutate(
+    leSize = vapply(leadingEdge, length, integer(1)),
+   leadingEdge = vapply(
+     leadingEdge,
+     function(x) paste(id2Name[x], collapse = "; "),
+     character(1)
+   ) 
+  ) %>% 
+  dplyr::select(gs_name, pval, padj, NES, ends_with("size"), leadingEdge) 
+htmltools::tags$caption(
+  htmltools::em(
+    glue(
+      "
+      All {nrow(df)} ImmunSigDB gene sets considered to be enriched in the 
+      ranked list of genes. 
+      All p-values are Bonferroni-adjusted. A Normalised Enrichment Score 
+      (NES) > 0 indicates that the geneset was enriched amongst 
+      up-regulated genes, whilst a negative NES indicates enrichment in the 
+      down-regulated genes. Genes in the Leading Edge represent those which
+      appear in the ranked list up until the point of the most extreme NES.
+      "
+    )
+  )
+)
+df %>% 
+  reactable(
+    searchable = TRUE, filterable = TRUE,
+    columns = list(
+      gs_name = colDef(
+        name = "Gene Set",
+        cell = function(value) str_replace_all(value, "_", " ")
+      ),
+      pval = colDef(show = FALSE),
+      padj = colDef(
+        name = "p<sub>adj</sub>", html = TRUE,
+        cell = function(value) {
+          fmt <- "%.2e"
+          if (value > 0.001) fmt <- "%.3f"
+          sprintf(fmt, value)
+        },
+        maxWidth = 100
+      ),
+      NES = colDef(
+        format = colFormat(digits = 2),
+        maxWidth = 80
+      ),
+      size = colDef(name = "Gene Set Size", maxWidth = 100),
+      leSize = colDef(name = "Leading Edge Size", maxWidth = 100),
+      leadingEdge = colDef(
+        name = "Leading Edge",
+        cell = function(value) with_tooltip(value, width = 50)
+      )
+    )
+  )
+```
+
+### Plots
+
+```{r plot-immune-barcodes, fig.cap = "Enrichment plots for the most highly ranked ImmuneSigDB gene-sets, showing the approximate position within the ranked list where the maximal enrichment score is found. The most compelling results will always be associated with maximal enrichment scores near either extreme."}
+p <- df %>% 
+  dplyr::slice(1:9) %>% 
+  pull("gs_name") %>% 
+  lapply(
+    function(x) {
+      plotEnrichment(gsByPathway[[x]], rankedGenes) +
+        ggtitle(
+          str_replace_all(x, "_", " ") %>% 
+            str_trunc(40)
+        ) +
+        ylim(0.6 * c(-1, 1)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 10))
+    }
+  )
+plot_grid(plotlist = p)
+```
+
+
+## GO: Biological Process Gene Sets {.tabset}
+
+### Results
+
+```{r gsea-gobp}
+df <- gseaResults %>% 
+  dplyr::filter(gs_subcat == "GO:BP", padj < 0.05) %>% 
+  mutate(
+    leSize = vapply(leadingEdge, length, integer(1)),
+   leadingEdge = vapply(
+     leadingEdge,
+     function(x) paste(id2Name[x], collapse = "; "),
+     character(1)
+   ) 
+  ) %>% 
+  dplyr::select(gs_name, pval, padj, NES, ends_with("size"), leadingEdge) 
+htmltools::tags$caption(
+  htmltools::em(
+    glue(
+      "
+      All {nrow(df)} GO: Biological Process gene sets considered to be enriched 
+      in the ranked list of genes. 
+      All p-values are Bonferroni-adjusted. A Normalised Enrichment Score 
+      (NES) > 0 indicates that the geneset was enriched amongst 
+      up-regulated genes, whilst a negative NES indicates enrichment in the 
+      down-regulated genes. Genes in the Leading Edge represent those which
+      appear in the ranked list up until the point of the most extreme NES.
+      "
+    )
+  )
+)
+df %>% 
+  reactable(
+    searchable = TRUE, filterable = TRUE,
+    columns = list(
+      gs_name = colDef(
+        name = "Gene Set",
+        cell = function(value) str_replace_all(value, "_", " ") %>% 
+          str_remove("^GO(BP|CC|MF) ")
+      ),
+      pval = colDef(show = FALSE),
+      padj = colDef(
+        name = "p<sub>adj</sub>", html = TRUE,
+        cell = function(value) {
+          fmt <- "%.2e"
+          if (value > 0.001) fmt <- "%.3f"
+          sprintf(fmt, value)
+        },
+        maxWidth = 100
+      ),
+      NES = colDef(
+        format = colFormat(digits = 2),
+        maxWidth = 80
+      ),
+      size = colDef(name = "Gene Set Size", maxWidth = 100),
+      leSize = colDef(name = "Leading Edge Size", maxWidth = 100),
+      leadingEdge = colDef(
+        name = "Leading Edge",
+        cell = function(value) with_tooltip(value, width = 50)
+      )
+    )
+  )
+```
+
+### Plots
+
+```{r plot-gobp-barcodes, fig.cap = "Enrichment plots for the most highly ranked GO: Biological Process gene-sets, showing the approximate position within the ranked list where the maximal enrichment score is found. The most compelling results will always be associated with maximal enrichment scores near either extreme."}
+p <- df %>% 
+  dplyr::slice(1:9) %>% 
+  pull("gs_name") %>% 
+  lapply(
+    function(x) {
+      plotEnrichment(gsByPathway[[x]], rankedGenes) +
+        ggtitle(
+          str_replace_all(x, "_", " ") %>% 
+            str_remove("^GO(BP|CC|MF) ") %>% 
+            str_trunc(40)
+        ) +
+        ylim(0.55 * c(-1, 1)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 10))
+    }
+  )
+plot_grid(plotlist = p)
+```
+
+## GO: Cellular Component Gene Sets {.tabset}
+
+### Results
+
+```{r gsea-gomf}
+df <- gseaResults %>% 
+  dplyr::filter(gs_subcat == "GO:MF", padj < 0.05) %>% 
+  mutate(
+    leSize = vapply(leadingEdge, length, integer(1)),
+   leadingEdge = vapply(
+     leadingEdge,
+     function(x) paste(id2Name[x], collapse = "; "),
+     character(1)
+   ) 
+  ) %>% 
+  dplyr::select(gs_name, pval, padj, NES, ends_with("size"), leadingEdge) 
+htmltools::tags$caption(
+  htmltools::em(
+    glue(
+      "
+      All {nrow(df)} GO: Molecular Function gene sets considered to be enriched 
+      in the ranked list of genes. 
+      All p-values are Bonferroni-adjusted. A Normalised Enrichment Score 
+      (NES) > 0 indicates that the geneset was enriched amongst 
+      up-regulated genes, whilst a negative NES indicates enrichment in the 
+      down-regulated genes. Genes in the Leading Edge represent those which
+      appear in the ranked list up until the point of the most extreme NES.
+      "
+    )
+  )
+)
+df %>% 
+  reactable(
+    searchable = TRUE, filterable = TRUE,
+    columns = list(
+      gs_name = colDef(
+        name = "Gene Set",
+        cell = function(value) str_replace_all(value, "_", " ") %>% 
+          str_remove("^GO(BP|CC|MF) ")
+      ),
+      pval = colDef(show = FALSE),
+      padj = colDef(
+        name = "p<sub>adj</sub>", html = TRUE,
+        cell = function(value) {
+          fmt <- "%.2e"
+          if (value > 0.001) fmt <- "%.3f"
+          sprintf(fmt, value)
+        },
+        maxWidth = 100
+      ),
+      NES = colDef(
+        format = colFormat(digits = 2),
+        maxWidth = 80
+      ),
+      size = colDef(name = "Gene Set Size", maxWidth = 100),
+      leSize = colDef(name = "Leading Edge Size", maxWidth = 100),
+      leadingEdge = colDef(
+        name = "Leading Edge",
+        cell = function(value) with_tooltip(value, width = 50)
+      )
+    )
+  )
+```
+
+### Plots
+
+```{r plot-gomf-barcodes, fig.cap = "Enrichment plots for the most highly ranked GO: Molecular Function gene-sets, showing the approximate position within the ranked list where the maximal enrichment score is found. The most compelling results will always be associated with maximal enrichment scores near either extreme."}
+p <- df %>% 
+  dplyr::slice(1:9) %>% 
+  pull("gs_name") %>% 
+  lapply(
+    function(x) {
+      plotEnrichment(gsByPathway[[x]], rankedGenes) +
+        ggtitle(
+          str_replace_all(x, "_", " ") %>% 
+            str_remove("^GO(BP|CC|MF) ") %>% 
+            str_trunc(40)
+        ) +
+        ylim(0.7 * c(-1, 1)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 10))
+    }
+  )
+plot_grid(plotlist = p)
+```
+
+## GO: Molecular Function Gene Sets {.tabset}
+
+### Results
+
+```{r gsea-gocc}
+df <- gseaResults %>% 
+  dplyr::filter(gs_subcat == "GO:CC", padj < 0.05) %>% 
+  mutate(
+    leSize = vapply(leadingEdge, length, integer(1)),
+   leadingEdge = vapply(
+     leadingEdge,
+     function(x) paste(id2Name[x], collapse = "; "),
+     character(1)
+   ) 
+  ) %>% 
+  dplyr::select(gs_name, pval, padj, NES, ends_with("size"), leadingEdge) 
+htmltools::tags$caption(
+  htmltools::em(
+    glue(
+      "
+      All {nrow(df)} GO: Cellular Component gene sets considered to be enriched 
+      in the ranked list of genes. 
+      All p-values are Bonferroni-adjusted. A Normalised Enrichment Score 
+      (NES) > 0 indicates that the geneset was enriched amongst 
+      up-regulated genes, whilst a negative NES indicates enrichment in the 
+      down-regulated genes. Genes in the Leading Edge represent those which
+      appear in the ranked list up until the point of the most extreme NES.
+      "
+    )
+  )
+)
+df %>% 
+  reactable(
+    searchable = TRUE, filterable = TRUE,
+    columns = list(
+      gs_name = colDef(
+        name = "Gene Set",
+        cell = function(value) str_replace_all(value, "_", " ") %>% 
+          str_remove("^GO(BP|CC|MF) ")
+      ),
+      pval = colDef(show = FALSE),
+      padj = colDef(
+        name = "p<sub>adj</sub>", html = TRUE,
+        cell = function(value) {
+          fmt <- "%.2e"
+          if (value > 0.001) fmt <- "%.3f"
+          sprintf(fmt, value)
+        },
+        maxWidth = 100
+      ),
+      NES = colDef(
+        format = colFormat(digits = 2),
+        maxWidth = 80
+      ),
+      size = colDef(name = "Gene Set Size", maxWidth = 100),
+      leSize = colDef(name = "Leading Edge Size", maxWidth = 100),
+      leadingEdge = colDef(
+        name = "Leading Edge",
+        cell = function(value) with_tooltip(value, width = 50)
+      )
+    )
+  )
+```
+
+### Plots
+
+```{r plot-gocc-barcodes, fig.cap = "Enrichment plots for the most highly ranked GO: Cellular Component gene-sets, showing the approximate position within the ranked list where the maximal enrichment score is found. The most compelling results will always be associated with maximal enrichment scores near either extreme."}
+p <- df %>% 
+  dplyr::slice(1:9) %>% 
+  pull("gs_name") %>% 
+  lapply(
+    function(x) {
+      plotEnrichment(gsByPathway[[x]], rankedGenes) +
+        ggtitle(
+          str_replace_all(x, "_", " ") %>% 
+            str_remove("^GO(BP|CC|MF) ") %>% 
+            str_trunc(40)
+        ) +
+        ylim(0.55 * c(-1, 1)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 10))
+    }
+  )
+plot_grid(plotlist = p)
 ```
