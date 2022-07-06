@@ -33,6 +33,8 @@ library(AnnotationHub)
 library(ensembldb)
 library(magrittr)
 library(BSgenome.Rnorvegicus.UCSC.rn6)
+library(broom)
+library(ggrepel)
 ```
 
 ```{r options}
@@ -64,69 +66,7 @@ group_cols <- hcl.colors(
   setNames(unique(samples$group))
 ```
 
-# Alignment Statistics
-
-```{r alnStats}
-alnFiles <- here::here("data/2_alignedData/log") %>%
-  list.files(pattern = "Log.final.out", full.names = TRUE) 
-alnStats <- alnFiles %>%
-  lapply(function(x){
-    importNgsLogs(x, type = "star") %>%
-      mutate(Filename = x)
-  }) %>%
-  bind_rows() %>%
-  mutate(
-    Filename = basename(Filename) %>% 
-      str_remove_all("Log.final.out")
-  ) %>%
-  left_join(samples, by = "Filename") %>%
-  as.data.frame()
-```
-
-- Across all files the total alignment rate ranged between `r pander(percent(range(alnStats$Total_Mapped_Percent)/100))`
-- Uniquely aligned reads ranged between `r pander(percent(range(alnStats$Uniquely_Mapped_Reads_Percent/100)))`
-- The percentages of mapped reads which aligned to 'too many' locations and were discarded was between `r pander(percent(range(alnStats$Percent_Of_Reads_Mapped_To_Too_Many_Loci)/100))`
-
-```{r plotAlnStats, fig.height=8, fig.cap = "*Alignment rates across all libraries*"}
-ggplotly(
-  alnStats %>%
-    dplyr::select(
-      Filename, group, contains("Percent"), -Total_Mapped_Percent
-    ) %>%
-    mutate(
-      Unmapped = Percent_Of_Reads_Unmapped_Too_Many_Mismatches +
-        Percent_Of_Reads_Unmapped_Too_Short +
-        Percent_Of_Reads_Unmapped_Other
-    ) %>%
-    dplyr::select(
-      Filename, group, contains("Mapped", ignore.case = FALSE), Unmapped
-    ) %>%
-    pivot_longer(
-      cols = contains("mapped"),
-      names_to = "Category",
-      values_to = "Percent"
-    ) %>%
-    mutate(
-      Category = str_remove_all(Category, "(_Percent|Percent_Of_Reads_)"),
-      Category = str_replace_all(Category, "_", " "),
-      Category = as.factor(Category),
-      Category = relevel(Category, ref = "Uniquely Mapped Reads"),
-      Category = fct_rev(Category)
-    ) %>%
-    ggplot(aes(Filename, Percent, fill = Category)) +
-    geom_col(colour = "black", size = 0.1) +
-    facet_wrap(~group, scales = "free_x") +
-    scale_y_continuous(expand = expansion(c(0, 0.05))) +
-    scale_fill_viridis_d(option = "E", direction = -1) +
-    theme(
-      axis.text.x = element_blank(),
-      axis.ticks.x = element_blank()
-    )
-)
-```
-
-
-# Read Assignment To Genes
+## Annotations
 
 ### Annotation Setup
 
@@ -158,16 +98,10 @@ transGC <- exonSeq %>%
   .[,1] %>% 
   setNames(names(exonSeq))
 transGR$gc_content <- transGC[names(transGR)]
-```
-
-```{r addTxLen}
 mcols(transGR) <- mcols(transGR) %>%
   cbind(
     transcriptLengths(ensDb)[rownames(.), c("nexon", "tx_len")]
   )
-```
-
-```{r addGcLen2Genes}
 mcols(genesGR) <- mcols(genesGR) %>%
   as.data.frame() %>%
   dplyr::select(
@@ -208,6 +142,11 @@ mcols(genesGR) <- mcols(genesGR) %>%
   ) %>%
   set_rownames(.$gene_id) %>%
   as("DataFrame")
+trans2Gene <- mcols(transGR) %>%
+	as.data.frame() %>%
+	dplyr::select(tx_id, gene_id) %>%
+	dplyr::filter(!is.na(tx_id), !is.na(gene_id)) %>%
+	as_tibble()
 ```
 
 Annotation data was loaded as an `EnsDb` object, using Ensembl release 96.
@@ -221,80 +160,83 @@ write_rds(genesGR, here::here("output/genesGR.rds"), compress = "gz")
 ```
 
 
-## Counts
-
-```{r countSummary}
-countSummary <- here::here("data/2_alignedData/featureCounts/counts.out.summary") %>%
-  importNgsLogs(type = "featureCounts") %>%
-  mutate(
-    Total = rowSums(
-      dplyr::select_if(., is.numeric)
-    ),
-    Filename = basename(Sample) %>% 
-      str_remove_all("Aligned.+")
-  ) %>%
-  dplyr::select(-Sample) %>%
-  left_join(samples)
+```{r counts, results='hide'}
+counts <- list.files(here::here("data/3_kallisto"), full.names = TRUE) %>% 
+	catchKallisto()
+dge <- counts$counts %>%
+	as.data.frame() %>%
+	rownames_to_column("tx_id") %>%
+	as_tibble() %>%
+	set_colnames(basename(colnames(.))) %>%
+	set_colnames(str_remove(colnames(.),"_CB2Y.+")) %>%
+	mutate(tx_id = str_remove(tx_id, "\\.[0-9]+")) %>% 
+  dplyr::filter(tx_id %in% trans2Gene$tx_id) %>% 
+  pivot_longer(cols = all_of(samples$Rat), names_to = "Rat", values_to = "count") %>% 
+	left_join(trans2Gene) %>%
+	group_by(Rat, gene_id) %>%
+	summarise(count = sum(count)) %>% 
+  pivot_wider(names_from = "Rat", values_from = "count") %>% 
+	dplyr::filter(grepl("ENSRNOG", gene_id)) %>%
+	as.data.frame() %>% 
+	column_to_rownames("gene_id") %>% 
+	DGEList() 
+dge$samples %<>%
+	mutate(Rat = rownames(.)) %>%
+  dplyr::select(-group) %>% 
+	left_join(samples, by = "Rat") %>%
+	set_rownames(.$Rat)
+dge$genes <- genesGR[rownames(dge)] %>% 
+  mcols()
 ```
 
-When assigning reads to genes, `featureCounts` was run setting the following criteria:
 
-- Libraries were assumed to be negatively stranded
-- The *minimum percentage* of a read which needed to overlap an exon before being counted was 100%
 
-Using these settings:
+# Read Assignment To Genes
 
-- The percentages of reads assigned to genes ranged between `r pander(percent(range(with(countSummary, Assigned / Total))))`
-- Of the total reads:
-    - Between  `r pander(percent(range(with(countSummary, Unassigned_NoFeatures / Total))))` were aligned but didn't overlap any known genes
-    - Between  `r pander(percent(range(with(countSummary, Unassigned_Ambiguity / Total))))` were unassigned as they were considered ambiguous
-    
-```{r plotAssignmentRate, fig.height=8, fig.cap = "*Rate of mapped reads being assigned to genes*"}
-ggplotly(
-  countSummary %>%
-    pivot_longer(
-      cols = contains("assigned"),
-      names_to = "Status",
-      values_to = "Reads"
-    ) %>%
-    dplyr::filter(Reads > 0) %>%
-    mutate(
-      Percent = round(100 * Reads / Total, 2)
-    ) %>%
-    arrange(Percent) %>%
-    mutate(
-      Status = str_replace_all(Status, "Unassigned_", "Unassigned: "),
-      Status = str_replace_all(Status, "_", " "),
-      Status = fct_inorder(Status)) %>%
-    ggplot(aes(Rat, Percent, fill = Status)) +
-    geom_col() +
-    facet_wrap(~group, scales = "free") +
-    scale_fill_viridis_d(option = "E", direction = -1) +
-    scale_y_continuous(
-      labels = ngsReports:::.addPercent,
-      expand = expansion(c(0, 0.05))
-    ) 
-)
+## Library Sizes
+
+```{r plot-lib-sizes, fig.cap = "Library sizes after summarising to gene-level counts."}
+dge$samples %>% 
+  mutate(lib.size = lib.size / 1e6) %>% 
+  ggplot(aes(Rat, lib.size, fill = group)) +
+  geom_col() +
+  facet_wrap(~group, scales = "free_x") +
+  scale_y_continuous(expand = expansion(c(0, .05))) +
+  scale_fill_manual(values = group_cols) +
+  labs(
+    x = "Sample", y = "Library Size (millions)",
+    fill = "Group"
+  )
+```
+
+After assignment to genes, library sizes ranged between `r pander(comma(range(dge$samples$lib.size)))` reads, with a median library size of `r pander(comma(median(dge$samples$lib.size)))` reads.
+
+## Count Assignment Rates
+
+```{r plot-percent-assigned, fig.cap = "Assignment rate for reads to genes. All samples showed that a large proportion of reads were not derived from mRNA transcripts, and as such, were not informative for the analysis."}
+trimFqc <- here::here("data/1_trimmedData/FastQC") %>%
+  list.files(pattern = "zip", full.names = TRUE) %>%
+  FastqcDataList()
+trimFqc %>% 
+  getModule("Basic") %>% 
+  mutate(Filename = str_remove_all(Filename, "_R1.fastq.gz")) %>% 
+  left_join(dge$samples, by = "Filename") %>% 
+  mutate(`% Assigned To Genes` = lib.size / Total_Sequences) %>% 
+  ggplot(aes(Rat, `% Assigned To Genes`, fill = group)) +
+  geom_col() +
+  facet_wrap(~group, scales = "free_x") +
+  scale_fill_manual(values = group_cols) +
+  scale_y_continuous(labels = percent, expand = expansion(c(0, 0.05))) +
+  labs(fill = "Group")
 ```
 
 
 ## Total Detected Genes
 
-```{r counts}
-counts <- here::here("data/2_alignedData/featureCounts/counts.out") %>%
-  read_tsv(comment = "#") %>%
-  rename_all(str_remove_all, pattern = "_CB2Y.++") %>%
-  rename_all(basename) %>%
-  dplyr::select(-Chr, -Start, -End, -Strand, -Length) %>%
-  column_to_rownames("Geneid") %>%
-  as.matrix()
-```
-
-- Of the `r comma(nrow(counts))` genes defined in this annotation build, `r comma(sum(rowSums(counts) == 0))` genes had no reads assigned in any samples.
-- The numbers of genes with at least one read assigned ranged between `r pander(comma(range(colSums(apply(counts, MARGIN = 2, as.logical)))))` across all samples.
+- Of the `r comma(nrow(dge))` genes defined in this annotation build, `r comma(sum(rowSums(dge$counts) == 0))` genes had no reads assigned in any samples.
 
 ```{r plotDetectedGenes, fig.height=6, fig.width=8, fig.cap = "*Total numbers of genes detected across all samples and groups.*"}
-counts %>%
+dge$counts %>%
   as_tibble() %>%
   mutate(
     across(everything(), as.logical)
@@ -325,7 +267,7 @@ counts %>%
 
 ```{r plotDetectedVsSamples, fig.height=6, fig.width=8, fig.cap = "*Total numbers of genes detected shown against the number of samples with at least one read assigned to each gene.*"}
 plotly::ggplotly(
-  counts %>%
+  dge$counts %>%
     is_greater_than(0) %>%
     rowSums() %>%
     table() %>%
@@ -366,57 +308,42 @@ plotly::ggplotly(
 ```
 
 
-## Library Sizes
-
-After assignment to genes, library sizes ranged between `r pander(comma(range(colSums(counts))))` reads, with a median library size of `r pander(comma(median(colSums(counts))))` reads.
-
-```{r plotLibSize, fig.height = 6, fig.width=8, fig.cap = "*Library sizes across all samples and groups. 3 saples fell below 10,000 reads which is the general minimum required for a confident analysis*"}
-plotly::ggplotly(
-  counts %>%
-    colSums() %>%
-    enframe(
-      name = "Rat", value = "Library Size"
-    ) %>%
-    left_join(samples) %>%
-    ggplot(aes(group, `Library Size`, colour = group, label = Filename)) +
-    geom_point() +
-    geom_segment(
-      aes(x = group, xend = group, y = 0, yend = `Library Size`),
-      data = . %>% 
-        group_by(group) %>%
-        summarise(`Library Size` = min(`Library Size`)),
-      colour = "black", size = 1/4,
-      inherit.aes = FALSE
-    ) +
-    scale_y_continuous(labels = comma, expand = expansion(c(0, 0.05))) +
-    scale_colour_manual(values = group_cols) +
-    labs(
-      x = "Group", 
-      colour = "Group"
-    )
-)
-```
 
 ## PCA
 
 ### Sample Similarity
 
 ```{r prcomp}
-pca <- counts %>%
+pca <- dge$counts %>%
   .[rowSums(. == 0) < ncol(.)/2,] %>%
   cpm(log = TRUE) %>%
   t() %>%
   prcomp()
 ```
 
-A PCA was performed using logCPM values from the subset of `r comma(sum(rowSums(counts == 0) < ncol(counts)/2))` genes with at least one read in more than half of the samples.
+A PCA was performed using logCPM values from the subset of `r comma(sum(rowSums(dge$counts == 0) < ncol(dge)/2))` genes with at least one read in more than half of the samples.
 
-```{r plotPCA, fig.height=6, fig.width=8, fig.cap="*PCA plot of all samples.*"}
+```{r plotPCA, fig.height=6, fig.width=8, fig.cap="*PCA plot of all samples. PC1 is most strongly correlated with library size, whilst PC2 appears to capture the majority of the biological variability*"}
 showLabel <- nrow(samples) <= 20
-pca %>%
-  autoplot(data = samples, colour = "group", label = showLabel, label.repel = showLabel) +
-  labs(colour = "Group") +
-  scale_colour_manual(values = group_cols)
+pca %>% 
+tidy() %>% 
+  dplyr::rename(Rat = row) %>% 
+  left_join(dge$samples, by = "Rat") %>% 
+  dplyr::filter(PC %in% 1:2) %>% 
+  pivot_wider(names_from = "PC", names_prefix = "PC", values_from = "value") %>% 
+  ggplot(
+    aes(PC1, PC2, colour = group, size = lib.size/1e6)
+  ) +
+  geom_point() +
+  geom_text_repel(aes(label = Rat), show.legend = FALSE) +
+  scale_colour_manual(values = group_cols) +
+  scale_size_continuous(limits = c(5, 15), breaks = seq(5, 15, by = 5)) +
+  labs(
+    x = glue("PC1 ({percent(pca$sdev[[1]]^2 / sum(pca$sdev^2), 0.1)})"),
+    y = glue("PC2 ({percent(pca$sdev[[2]]^2 / sum(pca$sdev^2), 0.1)})"),
+    colour = "Group",
+    size = "Library Size\n(millions)"
+  )
 ```
 
 ### GC and Length Biases
@@ -476,3 +403,8 @@ mcols(genesGR) %>%
     legend.position = "bottom"
     ) 
 ```
+
+```{r export}
+write_rds(dge, here::here("output/dge.rds"))
+```
+

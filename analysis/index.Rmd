@@ -50,6 +50,4 @@ Tool versions used were:
 
 - AdapterRemoval v2.2.1
 - FastQC v0.11.7
-- STAR v2.7.0
-- Subread v1.5.2
-
+- kallisto v0.43.1

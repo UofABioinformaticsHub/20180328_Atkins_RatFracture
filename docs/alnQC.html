@@ -457,10 +457,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -553,15 +553,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomUofABioinformaticsHub20180328AtkinsRatFracturetree4a20503b54a1463d1649b32d80baede8ba5a67cctargetblank4a20503a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomUofABioinformaticsHub20180328AtkinsRatFracturetreedd288796c9511a31bec808d6c30df09e0f6d275ftargetblankdd28879a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/tree/4a20503b54a1463d1649b32d80baede8ba5a67cc" target="_blank">4a20503</a>
+<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/tree/dd288796c9511a31bec808d6c30df09e0f6d275f" target="_blank">dd28879</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomUofABioinformaticsHub20180328AtkinsRatFracturetree4a20503b54a1463d1649b32d80baede8ba5a67cctargetblank4a20503a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomUofABioinformaticsHub20180328AtkinsRatFracturetreedd288796c9511a31bec808d6c30df09e0f6d275ftargetblankdd28879a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -571,7 +571,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/tree/4a20503b54a1463d1649b32d80baede8ba5a67cc" target="_blank">4a20503</a>.
+<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/tree/dd288796c9511a31bec808d6c30df09e0f6d275f" target="_blank">dd28879</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -586,23 +586,17 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  analysis/alnQC.Rmd
-    Untracked:  analysis/rawQC.Rmd
-    Untracked:  analysis/trimQC.Rmd
     Untracked:  data/gmt/
-    Untracked:  output/genesGR.rds
+    Untracked:  output/dge.rds
 
 Unstaged changes:
-    Modified:   20180328_Atkins_RatFracture.Rproj
-    Modified:   analysis/_site.yml
-    Deleted:    analysis/about.Rmd
+    Modified:   analysis/alnQC.Rmd
+    Modified:   analysis/dge.Rmd
     Modified:   analysis/index.Rmd
-    Deleted:    analysis/license.Rmd
-    Modified:   code/runPipeline.sh
-    Modified:   data/targets.csv
 
 </code></pre>
 <p>
@@ -617,10 +611,73 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/alnQC.Rmd</code>) and HTML
+(<code>docs/alnQC.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/blob/dd288796c9511a31bec808d6c30df09e0f6d275f/analysis/alnQC.Rmd" target="_blank">dd28879</a>
+</td>
+<td>
+Steve Pederson
+</td>
+<td>
+2022-07-06
+</td>
+<td>
+Setup initial DGE after restructure
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/dd288796c9511a31bec808d6c30df09e0f6d275f/docs/alnQC.html" target="_blank">dd28879</a>
+</td>
+<td>
+Steve Pederson
+</td>
+<td>
+2022-07-06
+</td>
+<td>
+Setup initial DGE after restructure
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -637,7 +694,9 @@ library(ggfortify)
 library(AnnotationHub)
 library(ensembldb)
 library(magrittr)
-library(BSgenome.Rnorvegicus.UCSC.rn6)</code></pre>
+library(BSgenome.Rnorvegicus.UCSC.rn6)
+library(broom)
+library(ggrepel)</code></pre>
 <pre class="r"><code>panderOptions(&quot;table.split.table&quot;, Inf)
 panderOptions(&quot;big.mark&quot;, &quot;,&quot;)
 theme_set(theme_bw())
@@ -656,76 +715,8 @@ rn6 &lt;- BSgenome.Rnorvegicus.UCSC.rn6</code></pre>
   palette = &quot;Zissou 1&quot;
   ) %&gt;%
   setNames(unique(samples$group))</code></pre>
-<div id="alignment-statistics" class="section level1">
-<h1>Alignment Statistics</h1>
-<pre class="r"><code>alnFiles &lt;- here::here(&quot;data/2_alignedData/log&quot;) %&gt;%
-  list.files(pattern = &quot;Log.final.out&quot;, full.names = TRUE) 
-alnStats &lt;- alnFiles %&gt;%
-  lapply(function(x){
-    importNgsLogs(x, type = &quot;star&quot;) %&gt;%
-      mutate(Filename = x)
-  }) %&gt;%
-  bind_rows() %&gt;%
-  mutate(
-    Filename = basename(Filename) %&gt;% 
-      str_remove_all(&quot;Log.final.out&quot;)
-  ) %&gt;%
-  left_join(samples, by = &quot;Filename&quot;) %&gt;%
-  as.data.frame()</code></pre>
-<ul>
-<li>Across all files the total alignment rate ranged between
-<em>85.3%</em> and <em>94.5%</em></li>
-<li>Uniquely aligned reads ranged between <em>45%</em> and
-<em>74%</em></li>
-<li>The percentages of mapped reads which aligned to ‘too many’
-locations and were discarded was between <em>3.8%</em> and
-<em>7.1%</em></li>
-</ul>
-<pre class="r"><code>ggplotly(
-  alnStats %&gt;%
-    dplyr::select(
-      Filename, group, contains(&quot;Percent&quot;), -Total_Mapped_Percent
-    ) %&gt;%
-    mutate(
-      Unmapped = Percent_Of_Reads_Unmapped_Too_Many_Mismatches +
-        Percent_Of_Reads_Unmapped_Too_Short +
-        Percent_Of_Reads_Unmapped_Other
-    ) %&gt;%
-    dplyr::select(
-      Filename, group, contains(&quot;Mapped&quot;, ignore.case = FALSE), Unmapped
-    ) %&gt;%
-    pivot_longer(
-      cols = contains(&quot;mapped&quot;),
-      names_to = &quot;Category&quot;,
-      values_to = &quot;Percent&quot;
-    ) %&gt;%
-    mutate(
-      Category = str_remove_all(Category, &quot;(_Percent|Percent_Of_Reads_)&quot;),
-      Category = str_replace_all(Category, &quot;_&quot;, &quot; &quot;),
-      Category = as.factor(Category),
-      Category = relevel(Category, ref = &quot;Uniquely Mapped Reads&quot;),
-      Category = fct_rev(Category)
-    ) %&gt;%
-    ggplot(aes(Filename, Percent, fill = Category)) +
-    geom_col(colour = &quot;black&quot;, size = 0.1) +
-    facet_wrap(~group, scales = &quot;free_x&quot;) +
-    scale_y_continuous(expand = expansion(c(0, 0.05))) +
-    scale_fill_viridis_d(option = &quot;E&quot;, direction = -1) +
-    theme(
-      axis.text.x = element_blank(),
-      axis.ticks.x = element_blank()
-    )
-)</code></pre>
-<div class="figure" style="text-align: center">
-<div id="htmlwidget-661d5ae1cbb6935a426f" style="width:960px;height:768px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-661d5ae1cbb6935a426f">{"x":{"data":[{"orientation":"v","width":[0.9,0.9,0.9],"base":[97.18,96.3,98.3],"x":[1,2,3],"y":[2.81,3.7,1.7],"text":["Filename: 190_F_CB2YGANXX_TGACCA_L001<br />Percent:  2.81<br />Category: Unmapped","Filename: 192_F_CB2YGANXX_ACAGTG_L001<br />Percent:  3.70<br />Category: Unmapped","Filename: 194_F_CB2YGANXX_GCCAAT_L001<br />Percent:  1.70<br />Category: Unmapped"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(255,234,70,1)","line":{"width":0.377952755905512,"color":"rgba(0,0,0,1)"}},"name":"Unmapped","legendgroup":"Unmapped","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[96.84,98.94,92.34],"x":[1,2,3],"y":[3.14999999999999,1.06,7.64999999999999],"text":["Filename: 179_F_CB2YGANXX_ATCACG_L001<br />Percent:  3.15<br />Category: Unmapped","Filename: 187_F_CB2YGANXX_CGATGT_L001<br />Percent:  1.06<br />Category: Unmapped","Filename: 188_F_CB2YGANXX_TTAGGC_L001<br />Percent:  7.65<br />Category: Unmapped"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(255,234,70,1)","line":{"width":0.377952755905512,"color":"rgba(0,0,0,1)"}},"name":"Unmapped","legendgroup":"Unmapped","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[92.55,89.55,94.47],"x":[1,2,3],"y":[4.63,6.75,3.83],"text":["Filename: 190_F_CB2YGANXX_TGACCA_L001<br />Percent:  4.63<br />Category: Mapped To Too Many Loci","Filename: 192_F_CB2YGANXX_ACAGTG_L001<br />Percent:  6.75<br />Category: Mapped To Too Many Loci","Filename: 194_F_CB2YGANXX_GCCAAT_L001<br />Percent:  3.83<br />Category: Mapped To Too Many Loci"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(166,157,117,1)","line":{"width":0.377952755905512,"color":"rgba(0,0,0,1)"}},"name":"Mapped To Too Many Loci","legendgroup":"Mapped To Too Many Loci","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[90.07,92.17,85.25],"x":[1,2,3],"y":[6.77000000000001,6.77000000000001,7.09],"text":["Filename: 179_F_CB2YGANXX_ATCACG_L001<br />Percent:  6.77<br />Category: Mapped To Too Many Loci","Filename: 187_F_CB2YGANXX_CGATGT_L001<br />Percent:  6.77<br />Category: Mapped To Too Many Loci","Filename: 188_F_CB2YGANXX_TTAGGC_L001<br />Percent:  7.09<br />Category: Mapped To Too Many Loci"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(166,157,117,1)","line":{"width":0.377952755905512,"color":"rgba(0,0,0,1)"}},"name":"Mapped To Too Many Loci","legendgroup":"Mapped To Too Many Loci","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[67.72,67.3,73.95],"x":[1,2,3],"y":[24.83,22.25,20.52],"text":["Filename: 190_F_CB2YGANXX_TGACCA_L001<br />Percent: 24.83<br />Category: Mapped To Multiple Loci","Filename: 192_F_CB2YGANXX_ACAGTG_L001<br />Percent: 22.25<br />Category: Mapped To Multiple Loci","Filename: 194_F_CB2YGANXX_GCCAAT_L001<br />Percent: 20.52<br />Category: Mapped To Multiple Loci"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(87,92,109,1)","line":{"width":0.377952755905512,"color":"rgba(0,0,0,1)"}},"name":"Mapped To Multiple Loci","legendgroup":"Mapped To Multiple Loci","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[45.08,49.37,63.83],"x":[1,2,3],"y":[44.99,42.8,21.42],"text":["Filename: 179_F_CB2YGANXX_ATCACG_L001<br />Percent: 44.99<br />Category: Mapped To Multiple Loci","Filename: 187_F_CB2YGANXX_CGATGT_L001<br />Percent: 42.80<br />Category: Mapped To Multiple Loci","Filename: 188_F_CB2YGANXX_TTAGGC_L001<br />Percent: 21.42<br />Category: Mapped To Multiple Loci"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(87,92,109,1)","line":{"width":0.377952755905512,"color":"rgba(0,0,0,1)"}},"name":"Mapped To Multiple Loci","legendgroup":"Mapped To Multiple Loci","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[0,0,0],"x":[1,2,3],"y":[67.72,67.3,73.95],"text":["Filename: 190_F_CB2YGANXX_TGACCA_L001<br />Percent: 67.72<br />Category: Uniquely Mapped Reads","Filename: 192_F_CB2YGANXX_ACAGTG_L001<br />Percent: 67.30<br />Category: Uniquely Mapped Reads","Filename: 194_F_CB2YGANXX_GCCAAT_L001<br />Percent: 73.95<br />Category: Uniquely Mapped Reads"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,32,77,1)","line":{"width":0.377952755905512,"color":"rgba(0,0,0,1)"}},"name":"Uniquely Mapped Reads","legendgroup":"Uniquely Mapped Reads","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[0,0,0],"x":[1,2,3],"y":[45.08,49.37,63.83],"text":["Filename: 179_F_CB2YGANXX_ATCACG_L001<br />Percent: 45.08<br />Category: Uniquely Mapped Reads","Filename: 187_F_CB2YGANXX_CGATGT_L001<br />Percent: 49.37<br />Category: Uniquely Mapped Reads","Filename: 188_F_CB2YGANXX_TTAGGC_L001<br />Percent: 63.83<br />Category: Uniquely Mapped Reads"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,32,77,1)","line":{"width":0.377952755905512,"color":"rgba(0,0,0,1)"}},"name":"Uniquely Mapped Reads","legendgroup":"Uniquely Mapped Reads","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":36.8219178082192,"r":7.30593607305936,"b":27.3972602739726,"l":43.1050228310502},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,0.497146118721461],"automargin":true,"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["190_F_CB2YGANXX_TGACCA_L001","192_F_CB2YGANXX_ACAGTG_L001","194_F_CB2YGANXX_GCCAAT_L001"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["190_F_CB2YGANXX_TGACCA_L001","192_F_CB2YGANXX_ACAGTG_L001","194_F_CB2YGANXX_GCCAAT_L001"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.65296803652968,"tickwidth":0,"showticklabels":false,"tickfont":{"color":null,"family":null,"size":0},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"annotations":[{"text":"Filename","x":0.5,"y":0,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"top","annotationType":"axis","yshift":-7.30593607305936},{"text":"Percent","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-27.7625570776256},{"text":"Control","x":0.248573059360731,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Diabetic","x":0.751426940639269,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0,105],"tickmode":"array","ticktext":["0","25","50","75","100"],"tickvals":[0,25,50,75,100],"categoryorder":"array","categoryarray":["0","25","50","75","100"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.497146118721461,"y0":0,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.497146118721461,"y0":0,"y1":23.37899543379,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.502853881278539,"x1":1,"y0":0,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.502853881278539,"x1":1,"y0":0,"y1":23.37899543379,"yanchor":1,"ysizemode":"pixel"}],"xaxis2":{"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["179_F_CB2YGANXX_ATCACG_L001","187_F_CB2YGANXX_CGATGT_L001","188_F_CB2YGANXX_TTAGGC_L001"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["179_F_CB2YGANXX_ATCACG_L001","187_F_CB2YGANXX_CGATGT_L001","188_F_CB2YGANXX_TTAGGC_L001"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.65296803652968,"tickwidth":0,"showticklabels":false,"tickfont":{"color":null,"family":null,"size":0},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.502853881278539,1],"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"title":{"text":"Category","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"f5bdee00fee":{"x":{},"y":{},"fill":{},"type":"bar"}},"cur_data":"f5bdee00fee","visdat":{"f5bdee00fee":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<p class="caption">
-<em>Alignment rates across all libraries</em>
-</p>
-</div>
-</div>
-<div id="read-assignment-to-genes" class="section level1">
-<h1>Read Assignment To Genes</h1>
+<div id="annotations" class="section level2">
+<h2>Annotations</h2>
 <div id="annotation-setup" class="section level3">
 <h3>Annotation Setup</h3>
 <pre class="r"><code>ah &lt;- AnnotationHub() %&gt;%
@@ -754,12 +745,12 @@ transGC &lt;- exonSeq %&gt;%
   letterFrequency(&quot;GC&quot;, as.prob = TRUE) %&gt;% 
   .[,1] %&gt;% 
   setNames(names(exonSeq))
-transGR$gc_content &lt;- transGC[names(transGR)]</code></pre>
-<pre class="r"><code>mcols(transGR) &lt;- mcols(transGR) %&gt;%
+transGR$gc_content &lt;- transGC[names(transGR)]
+mcols(transGR) &lt;- mcols(transGR) %&gt;%
   cbind(
     transcriptLengths(ensDb)[rownames(.), c(&quot;nexon&quot;, &quot;tx_len&quot;)]
-  )</code></pre>
-<pre class="r"><code>mcols(genesGR) &lt;- mcols(genesGR) %&gt;%
+  )
+mcols(genesGR) &lt;- mcols(genesGR) %&gt;%
   as.data.frame() %&gt;%
   dplyr::select(
     gene_id, gene_name, gene_biotype, entrezid
@@ -798,7 +789,12 @@ transGR$gc_content &lt;- transGC[names(transGR)]</code></pre>
     by = &quot;gene_id&quot;
   ) %&gt;%
   set_rownames(.$gene_id) %&gt;%
-  as(&quot;DataFrame&quot;)</code></pre>
+  as(&quot;DataFrame&quot;)
+trans2Gene &lt;- mcols(transGR) %&gt;%
+    as.data.frame() %&gt;%
+    dplyr::select(tx_id, gene_id) %&gt;%
+    dplyr::filter(!is.na(tx_id), !is.na(gene_id)) %&gt;%
+    as_tibble()</code></pre>
 <p>Annotation data was loaded as an <code>EnsDb</code> object, using
 Ensembl release 96. Transcript level gene lengths and GC content was
 converted to gene level values using:</p>
@@ -808,88 +804,91 @@ total length of transcripts</li>
 <li><strong>Gene Length</strong>: The mean transcript length</li>
 </ul>
 <pre class="r"><code>write_rds(genesGR, here::here(&quot;output/genesGR.rds&quot;), compress = &quot;gz&quot;)</code></pre>
+<pre class="r"><code>counts &lt;- list.files(here::here(&quot;data/3_kallisto&quot;), full.names = TRUE) %&gt;% 
+    catchKallisto()
+dge &lt;- counts$counts %&gt;%
+    as.data.frame() %&gt;%
+    rownames_to_column(&quot;tx_id&quot;) %&gt;%
+    as_tibble() %&gt;%
+    set_colnames(basename(colnames(.))) %&gt;%
+    set_colnames(str_remove(colnames(.),&quot;_CB2Y.+&quot;)) %&gt;%
+    mutate(tx_id = str_remove(tx_id, &quot;\\.[0-9]+&quot;)) %&gt;% 
+  dplyr::filter(tx_id %in% trans2Gene$tx_id) %&gt;% 
+  pivot_longer(cols = all_of(samples$Rat), names_to = &quot;Rat&quot;, values_to = &quot;count&quot;) %&gt;% 
+    left_join(trans2Gene) %&gt;%
+    group_by(Rat, gene_id) %&gt;%
+    summarise(count = sum(count)) %&gt;% 
+  pivot_wider(names_from = &quot;Rat&quot;, values_from = &quot;count&quot;) %&gt;% 
+    dplyr::filter(grepl(&quot;ENSRNOG&quot;, gene_id)) %&gt;%
+    as.data.frame() %&gt;% 
+    column_to_rownames(&quot;gene_id&quot;) %&gt;% 
+    DGEList() 
+dge$samples %&lt;&gt;%
+    mutate(Rat = rownames(.)) %&gt;%
+  dplyr::select(-group) %&gt;% 
+    left_join(samples, by = &quot;Rat&quot;) %&gt;%
+    set_rownames(.$Rat)
+dge$genes &lt;- genesGR[rownames(dge)] %&gt;% 
+  mcols()</code></pre>
 </div>
-<div id="counts" class="section level2">
-<h2>Counts</h2>
-<pre class="r"><code>countSummary &lt;- here::here(&quot;data/2_alignedData/featureCounts/counts.out.summary&quot;) %&gt;%
-  importNgsLogs(type = &quot;featureCounts&quot;) %&gt;%
-  mutate(
-    Total = rowSums(
-      dplyr::select_if(., is.numeric)
-    ),
-    Filename = basename(Sample) %&gt;% 
-      str_remove_all(&quot;Aligned.+&quot;)
-  ) %&gt;%
-  dplyr::select(-Sample) %&gt;%
-  left_join(samples)</code></pre>
-<p>When assigning reads to genes, <code>featureCounts</code> was run
-setting the following criteria:</p>
-<ul>
-<li>Libraries were assumed to be negatively stranded</li>
-<li>The <em>minimum percentage</em> of a read which needed to overlap an
-exon before being counted was 100%</li>
-</ul>
-<p>Using these settings:</p>
-<ul>
-<li>The percentages of reads assigned to genes ranged between
-<em>5%</em> and <em>21%</em></li>
-<li>Of the total reads:
-<ul>
-<li>Between <em>7%</em> and <em>29%</em> were aligned but didn’t overlap
-any known genes</li>
-<li>Between <em>0.051%</em> and <em>0.131%</em> were unassigned as they
-were considered ambiguous</li>
-</ul></li>
-</ul>
-<pre class="r"><code>ggplotly(
-  countSummary %&gt;%
-    pivot_longer(
-      cols = contains(&quot;assigned&quot;),
-      names_to = &quot;Status&quot;,
-      values_to = &quot;Reads&quot;
-    ) %&gt;%
-    dplyr::filter(Reads &gt; 0) %&gt;%
-    mutate(
-      Percent = round(100 * Reads / Total, 2)
-    ) %&gt;%
-    arrange(Percent) %&gt;%
-    mutate(
-      Status = str_replace_all(Status, &quot;Unassigned_&quot;, &quot;Unassigned: &quot;),
-      Status = str_replace_all(Status, &quot;_&quot;, &quot; &quot;),
-      Status = fct_inorder(Status)) %&gt;%
-    ggplot(aes(Rat, Percent, fill = Status)) +
-    geom_col() +
-    facet_wrap(~group, scales = &quot;free&quot;) +
-    scale_fill_viridis_d(option = &quot;E&quot;, direction = -1) +
-    scale_y_continuous(
-      labels = ngsReports:::.addPercent,
-      expand = expansion(c(0, 0.05))
-    ) 
-)</code></pre>
+</div>
+<div id="read-assignment-to-genes" class="section level1">
+<h1>Read Assignment To Genes</h1>
+<div id="library-sizes" class="section level2">
+<h2>Library Sizes</h2>
+<pre class="r"><code>dge$samples %&gt;% 
+  mutate(lib.size = lib.size / 1e6) %&gt;% 
+  ggplot(aes(Rat, lib.size, fill = group)) +
+  geom_col() +
+  facet_wrap(~group, scales = &quot;free_x&quot;) +
+  scale_y_continuous(expand = expansion(c(0, .05))) +
+  scale_fill_manual(values = group_cols) +
+  labs(
+    x = &quot;Sample&quot;, y = &quot;Library Size (millions)&quot;,
+    fill = &quot;Group&quot;
+  )</code></pre>
 <div class="figure" style="text-align: center">
-<div id="htmlwidget-4fe6f51a99ed990fe677" style="width:960px;height:768px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4fe6f51a99ed990fe677">{"x":{"data":[{"orientation":"v","width":[0.9,0.9,0.9],"base":[99.92,99.87,99.87],"x":[2,1,3],"y":[0.0900000000000034,0.129999999999995,0.129999999999995],"text":["Rat: 192_F<br />Percent:  0.09<br />Status: Unassigned: Ambiguity","Rat: 190_F<br />Percent:  0.13<br />Status: Unassigned: Ambiguity","Rat: 194_F<br />Percent:  0.13<br />Status: Unassigned: Ambiguity"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(255,234,70,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Unassigned: Ambiguity","legendgroup":"Unassigned: Ambiguity","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[99.94,99.91,99.92],"x":[1,2,3],"y":[0.0499999999999972,0.0799999999999983,0.0899999999999892],"text":["Rat: 179_F<br />Percent:  0.05<br />Status: Unassigned: Ambiguity","Rat: 187_F<br />Percent:  0.08<br />Status: Unassigned: Ambiguity","Rat: 188_F<br />Percent:  0.09<br />Status: Unassigned: Ambiguity"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(255,234,70,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Unassigned: Ambiguity","legendgroup":"Unassigned: Ambiguity","showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[88.29,83.12,78.97],"x":[2,1,3],"y":[11.63,16.75,20.9],"text":["Rat: 192_F<br />Percent: 11.63<br />Status: Assigned","Rat: 190_F<br />Percent: 16.75<br />Status: Assigned","Rat: 194_F<br />Percent: 20.90<br />Status: Assigned"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(166,157,117,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Assigned","legendgroup":"Assigned","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[95.13,93.05,91],"x":[1,3,2],"y":[4.81,6.87,8.91],"text":["Rat: 179_F<br />Percent:  4.81<br />Status: Assigned","Rat: 188_F<br />Percent:  6.87<br />Status: Assigned","Rat: 187_F<br />Percent:  8.91<br />Status: Assigned"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(166,157,117,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Assigned","legendgroup":"Assigned","showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[65.83,58.69,64.51],"x":[1,3,2],"y":[17.29,20.28,23.78],"text":["Rat: 190_F<br />Percent: 17.29<br />Status: Unassigned: NoFeatures","Rat: 194_F<br />Percent: 20.28<br />Status: Unassigned: NoFeatures","Rat: 192_F<br />Percent: 23.78<br />Status: Unassigned: NoFeatures"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(87,92,109,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Unassigned: NoFeatures","legendgroup":"Unassigned: NoFeatures","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[84.35,86.55,64.47],"x":[2,1,3],"y":[6.65000000000001,8.58,28.58],"text":["Rat: 187_F<br />Percent:  6.65<br />Status: Unassigned: NoFeatures","Rat: 179_F<br />Percent:  8.58<br />Status: Unassigned: NoFeatures","Rat: 188_F<br />Percent: 28.58<br />Status: Unassigned: NoFeatures"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(87,92,109,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Unassigned: NoFeatures","legendgroup":"Unassigned: NoFeatures","showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[0,0,0],"x":[3,2,1],"y":[58.69,64.51,65.83],"text":["Rat: 194_F<br />Percent: 58.69<br />Status: Unassigned: MappingQuality","Rat: 192_F<br />Percent: 64.51<br />Status: Unassigned: MappingQuality","Rat: 190_F<br />Percent: 65.83<br />Status: Unassigned: MappingQuality"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,32,77,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Unassigned: MappingQuality","legendgroup":"Unassigned: MappingQuality","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.9,0.9,0.9],"base":[0,0,0],"x":[3,2,1],"y":[64.47,84.35,86.55],"text":["Rat: 188_F<br />Percent: 64.47<br />Status: Unassigned: MappingQuality","Rat: 187_F<br />Percent: 84.35<br />Status: Unassigned: MappingQuality","Rat: 179_F<br />Percent: 86.55<br />Status: Unassigned: MappingQuality"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,32,77,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Unassigned: MappingQuality","legendgroup":"Unassigned: MappingQuality","showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":36.8219178082192,"r":7.30593607305936,"b":39.0867579908676,"l":48.9497716894977},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,0.487754254877543],"automargin":true,"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["190_F","192_F","194_F"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["190_F","192_F","194_F"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"annotations":[{"text":"Rat","x":0.5,"y":0,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"top","annotationType":"axis","yshift":-21.9178082191781},{"text":"Percent","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-33.6073059360731},{"text":"Control","x":0.243877127438771,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Diabetic","x":0.756122872561229,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0,105.0105],"tickmode":"array","ticktext":["0%","25%","50%","75%","100%"],"tickvals":[0,25,50,75,100],"categoryorder":"array","categoryarray":["0%","25%","50%","75%","100%"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.487754254877543,"y0":0,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.487754254877543,"y0":0,"y1":23.37899543379,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.512245745122457,"x1":1,"y0":0,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.512245745122457,"x1":1,"y0":0,"y1":23.37899543379,"yanchor":1,"ysizemode":"pixel"}],"xaxis2":{"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["179_F","187_F","188_F"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["179_F","187_F","188_F"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.512245745122457,1],"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y2","title":"","hoverformat":".2f"},"yaxis2":{"type":"linear","autorange":false,"range":[0,105.0105],"tickmode":"array","ticktext":["0%","25%","50%","75%","100%"],"tickvals":[0,25,50,75,100],"categoryorder":"array","categoryarray":["0%","25%","50%","75%","100%"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0,1],"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x2","title":"","hoverformat":".2f"},"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"title":{"text":"Status","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"f5bd4c074cc4":{"x":{},"y":{},"fill":{},"type":"bar"}},"cur_data":"f5bd4c074cc4","visdat":{"f5bd4c074cc4":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<img src="figure/alnQC.Rmd/plot-lib-sizes-1.png" alt="Library sizes after summarising to gene-level counts." width="960" />
 <p class="caption">
-<em>Rate of mapped reads being assigned to genes</em>
+Library sizes after summarising to gene-level counts.
+</p>
+</div>
+<p>After assignment to genes, library sizes ranged between
+<em>6,934,169</em> and <em>14,552,053</em> reads, with a median library
+size of 10,208,651 reads.</p>
+</div>
+<div id="count-assignment-rates" class="section level2">
+<h2>Count Assignment Rates</h2>
+<pre class="r"><code>trimFqc &lt;- here::here(&quot;data/1_trimmedData/FastQC&quot;) %&gt;%
+  list.files(pattern = &quot;zip&quot;, full.names = TRUE) %&gt;%
+  FastqcDataList()
+trimFqc %&gt;% 
+  getModule(&quot;Basic&quot;) %&gt;% 
+  mutate(Filename = str_remove_all(Filename, &quot;_R1.fastq.gz&quot;)) %&gt;% 
+  left_join(dge$samples, by = &quot;Filename&quot;) %&gt;% 
+  mutate(`% Assigned To Genes` = lib.size / Total_Sequences) %&gt;% 
+  ggplot(aes(Rat, `% Assigned To Genes`, fill = group)) +
+  geom_col() +
+  facet_wrap(~group, scales = &quot;free_x&quot;) +
+  scale_fill_manual(values = group_cols) +
+  scale_y_continuous(labels = percent, expand = expansion(c(0, 0.05))) +
+  labs(fill = &quot;Group&quot;)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/alnQC.Rmd/plot-percent-assigned-1.png" alt="Assignment rate for reads to genes. All samples showed that a large proportion of reads were not derived from mRNA transcripts, and as such, were not informative for the analysis." width="960" />
+<p class="caption">
+Assignment rate for reads to genes. All samples showed that a large
+proportion of reads were not derived from mRNA transcripts, and as such,
+were not informative for the analysis.
 </p>
 </div>
 </div>
 <div id="total-detected-genes" class="section level2">
 <h2>Total Detected Genes</h2>
-<pre class="r"><code>counts &lt;- here::here(&quot;data/2_alignedData/featureCounts/counts.out&quot;) %&gt;%
-  read_tsv(comment = &quot;#&quot;) %&gt;%
-  rename_all(str_remove_all, pattern = &quot;_CB2Y.++&quot;) %&gt;%
-  rename_all(basename) %&gt;%
-  dplyr::select(-Chr, -Start, -End, -Strand, -Length) %&gt;%
-  column_to_rownames(&quot;Geneid&quot;) %&gt;%
-  as.matrix()</code></pre>
 <ul>
-<li>Of the 32,623 genes defined in this annotation build, 4,508 genes
+<li>Of the 23,706 genes defined in this annotation build, 1,621 genes
 had no reads assigned in any samples.</li>
-<li>The numbers of genes with at least one read assigned ranged between
-<em>18,043</em> and <em>25,566</em> across all samples.</li>
 </ul>
-<pre class="r"><code>counts %&gt;%
+<pre class="r"><code>dge$counts %&gt;%
   as_tibble() %&gt;%
   mutate(
     across(everything(), as.logical)
@@ -922,8 +921,45 @@ had no reads assigned in any samples.</li>
 <em>Total numbers of genes detected across all samples and groups.</em>
 </p>
 </div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plotDetectedGenes-1">
+Past versions of plotDetectedGenes-1.png
+</button>
+</p>
+<div id="fig-plotDetectedGenes-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/blob/dd288796c9511a31bec808d6c30df09e0f6d275f/docs/figure/alnQC.Rmd/plotDetectedGenes-1.png" target="_blank">dd28879</a>
+</td>
+<td>
+Steve Pederson
+</td>
+<td>
+2022-07-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>plotly::ggplotly(
-  counts %&gt;%
+  dge$counts %&gt;%
     is_greater_than(0) %&gt;%
     rowSums() %&gt;%
     table() %&gt;%
@@ -962,50 +998,11 @@ had no reads assigned in any samples.</li>
     )
 )</code></pre>
 <div class="figure" style="text-align: center">
-<div id="htmlwidget-d62ba8d8d061dc21af51" style="width:768px;height:576px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d62ba8d8d061dc21af51">{"x":{"data":[{"x":[0,1,2,3,4,5,6],"y":[32623,28115,25392,22721,20382,17827,16156],"text":["Number of Samples: 0<br />Number of Genes: 32623<br />Status: Detectable","Number of Samples: 1<br />Number of Genes: 28115<br />Status: Detectable","Number of Samples: 2<br />Number of Genes: 25392<br />Status: Detectable","Number of Samples: 3<br />Number of Genes: 22721<br />Status: Detectable","Number of Samples: 4<br />Number of Genes: 20382<br />Status: Detectable","Number of Samples: 5<br />Number of Genes: 17827<br />Status: Detectable","Number of Samples: 6<br />Number of Genes: 16156<br />Status: Detectable"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(26,179,51,1)","dash":"solid"},"hoveron":"points","name":"Detectable","legendgroup":"Detectable","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,1,2,3,4,5,6],"y":[0,4508,7231,9902,12241,14796,16467],"text":["Number of Samples: 0<br />Number of Genes:     0<br />Status: Undetectable","Number of Samples: 1<br />Number of Genes:  4508<br />Status: Undetectable","Number of Samples: 2<br />Number of Genes:  7231<br />Status: Undetectable","Number of Samples: 3<br />Number of Genes:  9902<br />Status: Undetectable","Number of Samples: 4<br />Number of Genes: 12241<br />Status: Undetectable","Number of Samples: 5<br />Number of Genes: 14796<br />Status: Undetectable","Number of Samples: 6<br />Number of Genes: 16467<br />Status: Undetectable"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(179,26,26,1)","dash":"solid"},"hoveron":"points","name":"Undetectable","legendgroup":"Undetectable","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[3,3],"y":[-1631.15,34254.15],"text":"Mean Sample Number: 3","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(127,127,127,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":25.7412480974125,"r":7.30593607305936,"b":39.6955859969559,"l":60.6392694063927},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.06,6.06],"tickmode":"array","ticktext":["0","2","4","6"],"tickvals":[6.93889390390723e-18,2,4,6],"categoryorder":"array","categoryarray":["0","2","4","6"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":{"text":"Samples > 0","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-1631.15,34254.15],"tickmode":"array","ticktext":["0","10,000","20,000","30,000"],"tickvals":[0,10000,20000,30000],"categoryorder":"array","categoryarray":["0","10,000","20,000","30,000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"Number of Genes","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"title":{"text":"Status","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"f5bd6c2ec864":{"x":{},"y":{},"colour":{},"type":"scatter"},"f5bd309aa0f7":{"xintercept":{}}},"cur_data":"f5bd6c2ec864","visdat":{"f5bd6c2ec864":["function (y) ","x"],"f5bd309aa0f7":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-661d5ae1cbb6935a426f" style="width:768px;height:576px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-661d5ae1cbb6935a426f">{"x":{"data":[{"x":[0,1,2,3,4,5,6],"y":[23706,22085,20575,19230,18017,16605,15528],"text":["Number of Samples: 0<br />Number of Genes: 23706<br />Status: Detectable","Number of Samples: 1<br />Number of Genes: 22085<br />Status: Detectable","Number of Samples: 2<br />Number of Genes: 20575<br />Status: Detectable","Number of Samples: 3<br />Number of Genes: 19230<br />Status: Detectable","Number of Samples: 4<br />Number of Genes: 18017<br />Status: Detectable","Number of Samples: 5<br />Number of Genes: 16605<br />Status: Detectable","Number of Samples: 6<br />Number of Genes: 15528<br />Status: Detectable"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(26,179,51,1)","dash":"solid"},"hoveron":"points","name":"Detectable","legendgroup":"Detectable","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,1,2,3,4,5,6],"y":[0,1621,3131,4476,5689,7101,8178],"text":["Number of Samples: 0<br />Number of Genes:     0<br />Status: Undetectable","Number of Samples: 1<br />Number of Genes:  1621<br />Status: Undetectable","Number of Samples: 2<br />Number of Genes:  3131<br />Status: Undetectable","Number of Samples: 3<br />Number of Genes:  4476<br />Status: Undetectable","Number of Samples: 4<br />Number of Genes:  5689<br />Status: Undetectable","Number of Samples: 5<br />Number of Genes:  7101<br />Status: Undetectable","Number of Samples: 6<br />Number of Genes:  8178<br />Status: Undetectable"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(179,26,26,1)","dash":"solid"},"hoveron":"points","name":"Undetectable","legendgroup":"Undetectable","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[3,3],"y":[-1185.3,24891.3],"text":"Mean Sample Number: 3","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(127,127,127,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":25.7412480974125,"r":7.30593607305936,"b":39.6955859969559,"l":60.6392694063927},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.06,6.06],"tickmode":"array","ticktext":["0","2","4","6"],"tickvals":[6.93889390390723e-18,2,4,6],"categoryorder":"array","categoryarray":["0","2","4","6"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":{"text":"Samples > 0","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-1185.3,24891.3],"tickmode":"array","ticktext":["0","5,000","10,000","15,000","20,000"],"tickvals":[0,5000,10000,15000,20000],"categoryorder":"array","categoryarray":["0","5,000","10,000","15,000","20,000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"Number of Genes","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"title":{"text":"Status","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"7b85a4acabe":{"x":{},"y":{},"colour":{},"type":"scatter"},"7b85399b7092":{"xintercept":{}}},"cur_data":"7b85a4acabe","visdat":{"7b85a4acabe":["function (y) ","x"],"7b85399b7092":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 <em>Total numbers of genes detected shown against the number of samples
 with at least one read assigned to each gene.</em>
-</p>
-</div>
-</div>
-<div id="library-sizes" class="section level2">
-<h2>Library Sizes</h2>
-<p>After assignment to genes, library sizes ranged between
-<em>4,868,319</em> and <em>14,729,011</em> reads, with a median library
-size of 10,432,760 reads.</p>
-<pre class="r"><code>plotly::ggplotly(
-  counts %&gt;%
-    colSums() %&gt;%
-    enframe(
-      name = &quot;Rat&quot;, value = &quot;Library Size&quot;
-    ) %&gt;%
-    left_join(samples) %&gt;%
-    ggplot(aes(group, `Library Size`, colour = group, label = Filename)) +
-    geom_point() +
-    geom_segment(
-      aes(x = group, xend = group, y = 0, yend = `Library Size`),
-      data = . %&gt;% 
-        group_by(group) %&gt;%
-        summarise(`Library Size` = min(`Library Size`)),
-      colour = &quot;black&quot;, size = 1/4,
-      inherit.aes = FALSE
-    ) +
-    scale_y_continuous(labels = comma, expand = expansion(c(0, 0.05))) +
-    scale_colour_manual(values = group_cols) +
-    labs(
-      x = &quot;Group&quot;, 
-      colour = &quot;Group&quot;
-    )
-)</code></pre>
-<div class="figure" style="text-align: center">
-<div id="htmlwidget-07df405ecc4e369c12cd" style="width:768px;height:576px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-07df405ecc4e369c12cd">{"x":{"data":[{"x":[1,1,1],"y":[8277624,12611630,14729011],"text":["Library Size:  8277624<br />Filename: 192_F_CB2YGANXX_ACAGTG_L001","Library Size: 12611630<br />Filename: 190_F_CB2YGANXX_TGACCA_L001","Library Size: 14729011<br />Filename: 194_F_CB2YGANXX_GCCAAT_L001"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(245,25,28,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(245,25,28,1)"}},"hoveron":"points","name":"Control","legendgroup":"Control","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[2,2,2],"y":[4868319,7138780,12587895],"text":["Library Size:  4868319<br />Filename: 188_F_CB2YGANXX_TTAGGC_L001","Library Size:  7138780<br />Filename: 179_F_CB2YGANXX_ATCACG_L001","Library Size: 12587895<br />Filename: 187_F_CB2YGANXX_CGATGT_L001"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(59,153,177,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(59,153,177,1)"}},"hoveron":"points","name":"Diabetic","legendgroup":"Diabetic","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,1,null,2,2],"y":[0,8277624,null,0,4868319],"text":["y: 0<br />Library Size: 8277624","y: 0<br />Library Size: 8277624",null,"y: 0<br />Library Size: 4868319","y: 0<br />Library Size: 4868319"],"type":"scatter","mode":"lines","line":{"width":0.94488188976378,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":25.7412480974125,"r":7.30593607305936,"b":39.6955859969559,"l":84.0182648401827},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,2.6],"tickmode":"array","ticktext":["Control","Diabetic"],"tickvals":[1,2],"categoryorder":"array","categoryarray":["Control","Diabetic"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":{"text":"Group","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0,15465461.55],"tickmode":"array","ticktext":["0","5,000,000","10,000,000","15,000,000"],"tickvals":[0,5000000,10000000,15000000],"categoryorder":"array","categoryarray":["0","5,000,000","10,000,000","15,000,000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"Library Size","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"title":{"text":"Group","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"f5bd4b0e4e96":{"x":{},"y":{},"colour":{},"label":{},"type":"scatter"},"f5bd62ceb5dc":{"x":{},"y":{},"xend":{},"yend":{}}},"cur_data":"f5bd4b0e4e96","visdat":{"f5bd4b0e4e96":["function (y) ","x"],"f5bd62ceb5dc":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<p class="caption">
-<em>Library sizes across all samples and groups. 3 saples fell below
-10,000 reads which is the general minimum required for a confident
-analysis</em>
 </p>
 </div>
 </div>
@@ -1013,23 +1010,77 @@ analysis</em>
 <h2>PCA</h2>
 <div id="sample-similarity" class="section level3">
 <h3>Sample Similarity</h3>
-<pre class="r"><code>pca &lt;- counts %&gt;%
+<pre class="r"><code>pca &lt;- dge$counts %&gt;%
   .[rowSums(. == 0) &lt; ncol(.)/2,] %&gt;%
   cpm(log = TRUE) %&gt;%
   t() %&gt;%
   prcomp()</code></pre>
-<p>A PCA was performed using logCPM values from the subset of 20,382
+<p>A PCA was performed using logCPM values from the subset of 18,017
 genes with at least one read in more than half of the samples.</p>
 <pre class="r"><code>showLabel &lt;- nrow(samples) &lt;= 20
-pca %&gt;%
-  autoplot(data = samples, colour = &quot;group&quot;, label = showLabel, label.repel = showLabel) +
-  labs(colour = &quot;Group&quot;) +
-  scale_colour_manual(values = group_cols)</code></pre>
+pca %&gt;% 
+tidy() %&gt;% 
+  dplyr::rename(Rat = row) %&gt;% 
+  left_join(dge$samples, by = &quot;Rat&quot;) %&gt;% 
+  dplyr::filter(PC %in% 1:2) %&gt;% 
+  pivot_wider(names_from = &quot;PC&quot;, names_prefix = &quot;PC&quot;, values_from = &quot;value&quot;) %&gt;% 
+  ggplot(
+    aes(PC1, PC2, colour = group, size = lib.size/1e6)
+  ) +
+  geom_point() +
+  geom_text_repel(aes(label = Rat), show.legend = FALSE) +
+  scale_colour_manual(values = group_cols) +
+  scale_size_continuous(limits = c(5, 15), breaks = seq(5, 15, by = 5)) +
+  labs(
+    x = glue(&quot;PC1 ({percent(pca$sdev[[1]]^2 / sum(pca$sdev^2), 0.1)})&quot;),
+    y = glue(&quot;PC2 ({percent(pca$sdev[[2]]^2 / sum(pca$sdev^2), 0.1)})&quot;),
+    colour = &quot;Group&quot;,
+    size = &quot;Library Size\n(millions)&quot;
+  )</code></pre>
 <div class="figure" style="text-align: center">
-<img src="figure/alnQC.Rmd/plotPCA-1.png" alt="*PCA plot of all samples.*" width="768" />
+<img src="figure/alnQC.Rmd/plotPCA-1.png" alt="*PCA plot of all samples. PC1 is most strongly correlated with library size, whilst PC2 appears to capture the majority of the biological variability*" width="768" />
 <p class="caption">
-<em>PCA plot of all samples.</em>
+<em>PCA plot of all samples. PC1 is most strongly correlated with
+library size, whilst PC2 appears to capture the majority of the
+biological variability</em>
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plotPCA-1">
+Past versions of plotPCA-1.png
+</button>
+</p>
+<div id="fig-plotPCA-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/blob/dd288796c9511a31bec808d6c30df09e0f6d275f/docs/figure/alnQC.Rmd/plotPCA-1.png" target="_blank">dd28879</a>
+</td>
+<td>
+Steve Pederson
+</td>
+<td>
+2022-07-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <div id="gc-and-length-biases" class="section level3">
@@ -1095,6 +1146,44 @@ indicate the t-statistic, with tranparency denoting significance as
 -log10(p), using Bonferroni-adjusted p-values.</em>
 </p>
 </div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plotPCA_GC_Length-1">
+Past versions of plotPCA_GC_Length-1.png
+</button>
+</p>
+<div id="fig-plotPCA_GC_Length-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/blob/dd288796c9511a31bec808d6c30df09e0f6d275f/docs/figure/alnQC.Rmd/plotPCA_GC_Length-1.png" target="_blank">dd28879</a>
+</td>
+<td>
+Steve Pederson
+</td>
+<td>
+2022-07-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>write_rds(dge, here::here(&quot;output/dge.rds&quot;))</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1125,25 +1214,26 @@ attached base packages:
 [8] base     
 
 other attached packages:
- [1] BSgenome.Rnorvegicus.UCSC.rn6_1.4.1 BSgenome_1.64.0                    
- [3] rtracklayer_1.56.0                  Biostrings_2.64.0                  
- [5] XVector_0.36.0                      magrittr_2.0.3                     
- [7] ensembldb_2.20.1                    AnnotationFilter_1.20.0            
- [9] GenomicFeatures_1.48.0              AnnotationDbi_1.58.0               
-[11] Biobase_2.56.0                      GenomicRanges_1.48.0               
-[13] GenomeInfoDb_1.32.1                 IRanges_2.30.0                     
-[15] S4Vectors_0.34.0                    AnnotationHub_3.4.0                
-[17] BiocFileCache_2.4.0                 dbplyr_2.1.1                       
-[19] ggfortify_0.4.14                    edgeR_3.38.0                       
-[21] limma_3.52.0                        plotly_4.10.0                      
-[23] glue_1.6.2                          pander_0.6.5                       
-[25] scales_1.2.0                        yaml_2.3.5                         
-[27] forcats_0.5.1                       stringr_1.4.0                      
-[29] dplyr_1.0.9                         purrr_0.3.4                        
-[31] readr_2.1.2                         tidyr_1.2.0                        
-[33] tidyverse_1.3.1                     ngsReports_1.13.0                  
-[35] tibble_3.1.7                        ggplot2_3.3.6                      
-[37] BiocGenerics_0.42.0                 workflowr_1.7.0                    
+ [1] ggrepel_0.9.1                       broom_0.8.0                        
+ [3] BSgenome.Rnorvegicus.UCSC.rn6_1.4.1 BSgenome_1.64.0                    
+ [5] rtracklayer_1.56.0                  Biostrings_2.64.0                  
+ [7] XVector_0.36.0                      magrittr_2.0.3                     
+ [9] ensembldb_2.20.1                    AnnotationFilter_1.20.0            
+[11] GenomicFeatures_1.48.0              AnnotationDbi_1.58.0               
+[13] Biobase_2.56.0                      GenomicRanges_1.48.0               
+[15] GenomeInfoDb_1.32.1                 IRanges_2.30.0                     
+[17] S4Vectors_0.34.0                    AnnotationHub_3.4.0                
+[19] BiocFileCache_2.4.0                 dbplyr_2.1.1                       
+[21] ggfortify_0.4.14                    edgeR_3.38.0                       
+[23] limma_3.52.0                        plotly_4.10.0                      
+[25] glue_1.6.2                          pander_0.6.5                       
+[27] scales_1.2.0                        yaml_2.3.5                         
+[29] forcats_0.5.1                       stringr_1.4.0                      
+[31] dplyr_1.0.9                         purrr_0.3.4                        
+[33] readr_2.1.2                         tidyr_1.2.0                        
+[35] tidyverse_1.3.1                     ngsReports_1.13.0                  
+[37] tibble_3.1.7                        ggplot2_3.3.6                      
+[39] BiocGenerics_0.42.0                 workflowr_1.7.0                    
 
 loaded via a namespace (and not attached):
   [1] readxl_1.4.0                  backports_1.4.1              
@@ -1153,14 +1243,14 @@ loaded via a namespace (and not attached):
   [9] memoise_2.0.1                 tzdb_0.3.0                   
  [11] modelr_0.1.8                  matrixStats_0.62.0           
  [13] vroom_1.5.7                   prettyunits_1.1.1            
- [15] colorspace_2.0-3              ggrepel_0.9.1                
- [17] blob_1.2.3                    rvest_1.0.2                  
- [19] rappdirs_0.3.3                haven_2.5.0                  
- [21] xfun_0.30                     callr_3.7.0                  
- [23] crayon_1.5.1                  RCurl_1.98-1.6               
- [25] jsonlite_1.8.0                zoo_1.8-10                   
- [27] gtable_0.3.0                  zlibbioc_1.42.0              
- [29] DelayedArray_0.22.0           DBI_1.1.2                    
+ [15] colorspace_2.0-3              blob_1.2.3                   
+ [17] rvest_1.0.2                   rappdirs_0.3.3               
+ [19] haven_2.5.0                   xfun_0.30                    
+ [21] callr_3.7.0                   crayon_1.5.1                 
+ [23] RCurl_1.98-1.6                jsonlite_1.8.0               
+ [25] zoo_1.8-10                    gtable_0.3.0                 
+ [27] zlibbioc_1.42.0               DelayedArray_0.22.0          
+ [29] Rhdf5lib_1.18.0               DBI_1.1.2                    
  [31] Rcpp_1.0.8.3                  viridisLite_0.4.0            
  [33] xtable_1.8-4                  progress_1.2.2               
  [35] bit_4.0.4                     DT_0.22                      
@@ -1175,35 +1265,36 @@ loaded via a namespace (and not attached):
  [53] cellranger_1.1.0              tools_4.2.0                  
  [55] cachem_1.0.6                  cli_3.3.0                    
  [57] generics_0.1.2                RSQLite_2.2.13               
- [59] broom_0.8.0                   evaluate_0.15                
- [61] fastmap_1.1.0                 ggdendro_0.1.23              
- [63] processx_3.5.3                knitr_1.39                   
- [65] bit64_4.0.5                   fs_1.5.2                     
- [67] KEGGREST_1.36.0               whisker_0.4                  
- [69] mime_0.12                     xml2_1.3.3                   
- [71] biomaRt_2.52.0                compiler_4.2.0               
- [73] rstudioapi_0.13               filelock_1.0.2               
- [75] curl_4.3.2                    png_0.1-7                    
- [77] interactiveDisplayBase_1.34.0 reprex_2.0.1                 
- [79] bslib_0.3.1                   stringi_1.7.6                
- [81] highr_0.9                     ps_1.7.0                     
- [83] lattice_0.20-45               ProtGenerics_1.28.0          
- [85] Matrix_1.4-1                  vctrs_0.4.1                  
+ [59] evaluate_0.15                 fastmap_1.1.0                
+ [61] ggdendro_0.1.23               processx_3.5.3               
+ [63] knitr_1.39                    bit64_4.0.5                  
+ [65] fs_1.5.2                      KEGGREST_1.36.0              
+ [67] whisker_0.4                   mime_0.12                    
+ [69] xml2_1.3.3                    biomaRt_2.52.0               
+ [71] compiler_4.2.0                rstudioapi_0.13              
+ [73] filelock_1.0.2                curl_4.3.2                   
+ [75] png_0.1-7                     interactiveDisplayBase_1.34.0
+ [77] reprex_2.0.1                  bslib_0.3.1                  
+ [79] stringi_1.7.6                 highr_0.9                    
+ [81] ps_1.7.0                      lattice_0.20-45              
+ [83] ProtGenerics_1.28.0           Matrix_1.4-1                 
+ [85] vctrs_0.4.1                   rhdf5filters_1.8.0           
  [87] pillar_1.7.0                  lifecycle_1.0.1              
  [89] BiocManager_1.30.17           jquerylib_0.1.4              
  [91] data.table_1.14.2             bitops_1.0-7                 
  [93] httpuv_1.6.5                  R6_2.5.1                     
  [95] BiocIO_1.6.0                  promises_1.2.0.1             
  [97] gridExtra_2.3                 MASS_7.3-57                  
- [99] assertthat_0.2.1              SummarizedExperiment_1.26.1  
-[101] rprojroot_2.0.3               rjson_0.2.21                 
-[103] withr_2.5.0                   GenomicAlignments_1.32.0     
-[105] Rsamtools_2.12.0              GenomeInfoDbData_1.2.8       
-[107] parallel_4.2.0                hms_1.1.1                    
-[109] grid_4.2.0                    rmarkdown_2.14               
-[111] MatrixGenerics_1.8.0          git2r_0.30.1                 
-[113] getPass_0.2-2                 shiny_1.7.1                  
-[115] lubridate_1.8.0               restfulr_0.0.13              </code></pre>
+ [99] assertthat_0.2.1              rhdf5_2.40.0                 
+[101] SummarizedExperiment_1.26.1   rprojroot_2.0.3              
+[103] rjson_0.2.21                  withr_2.5.0                  
+[105] GenomicAlignments_1.32.0      Rsamtools_2.12.0             
+[107] GenomeInfoDbData_1.2.8        parallel_4.2.0               
+[109] hms_1.1.1                     grid_4.2.0                   
+[111] rmarkdown_2.14                MatrixGenerics_1.8.0         
+[113] git2r_0.30.1                  getPass_0.2-2                
+[115] shiny_1.7.1                   lubridate_1.8.0              
+[117] restfulr_0.0.13              </code></pre>
 </div>
 </div>
 </div>
