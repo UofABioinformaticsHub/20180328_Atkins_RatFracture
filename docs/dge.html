@@ -549,15 +549,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomUofABioinformaticsHub20180328AtkinsRatFracturetree28164074903afad68dc9627da1256bc7d5e68301targetblank2816407a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomUofABioinformaticsHub20180328AtkinsRatFracturetree94df03db5ecc0c56f6d54a2a27c6f6dd43f95283targetblank94df03da">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/tree/28164074903afad68dc9627da1256bc7d5e68301" target="_blank">2816407</a>
+<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/tree/94df03db5ecc0c56f6d54a2a27c6f6dd43f95283" target="_blank">94df03d</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomUofABioinformaticsHub20180328AtkinsRatFracturetree28164074903afad68dc9627da1256bc7d5e68301targetblank2816407a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomUofABioinformaticsHub20180328AtkinsRatFracturetree94df03db5ecc0c56f6d54a2a27c6f6dd43f95283targetblank94df03da"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -567,7 +567,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/tree/28164074903afad68dc9627da1256bc7d5e68301" target="_blank">2816407</a>.
+<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/tree/94df03db5ecc0c56f6d54a2a27c6f6dd43f95283" target="_blank">94df03d</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -628,6 +628,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/blob/94df03db5ecc0c56f6d54a2a27c6f6dd43f95283/analysis/dge.Rmd" target="_blank">94df03d</a>
+</td>
+<td>
+Steve Pederson
+</td>
+<td>
+2022-07-14
+</td>
+<td>
+Changed font-size for top-ranked table
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/UofABioinformaticsHub/20180328_Atkins_RatFracture/a139506ea2c56e41c94f44c478aae1fdadb1593f/docs/dge.html" target="_blank">a139506</a>
+</td>
+<td>
+Steve Pederson
+</td>
+<td>
+2022-07-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1142,7 +1176,8 @@ The lowest expressed gene which passed the criteria for detection received
 a value of -1.42, marking this as the effective 
 lower limit of detection.</em>
 </caption>
-<pre class="r"><code>results %&gt;% 
+<pre class="r"><code>fs &lt;- 12
+results %&gt;% 
   dplyr::filter(FDR &lt; 0.1) %&gt;% 
   reactable(
     pagination = FALSE,
@@ -1189,10 +1224,11 @@ lower limit of detection.</em>
         },
         maxWidth = 80
       )
-    )
+    ),
+    theme = reactableTheme(style = list(fontSize = fs))
   )</code></pre>
 <div id="htmlwidget-d061dc21af5107df405e" class="reactable html-widget" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-d061dc21af5107df405e">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"gene_id":["ENSRNOG00000047551","ENSRNOG00000050004","ENSRNOG00000060849","ENSRNOG00000002802","ENSRNOG00000032626","ENSRNOG00000032832","ENSRNOG00000010278","ENSRNOG00000022839","ENSRNOG00000062228","ENSRNOG00000015992","ENSRNOG00000000239","ENSRNOG00000010797","ENSRNOG00000045989"],"gene_name":["Pnpla2","LOC100909761","Rcor2","Cxcl1","Mmp3","Mmp10","Il6","Ifit3","LOC100359515","Ccl20","Ccl7","Esm1","Hba-a3"],"logFC":[-7.39184764887098,6.25700520563667,-5.33729633417177,4.5305796848235,3.30484601386176,3.30585084762485,4.470051993425,2.9701469502195,4.56155751989565,3.94796308593642,2.42764842922466,-2.4836984748837,-2.32758566549567],"AveExpr":[0.129672036387214,-1.41670774802594,-1.30314428317846,1.90173917662942,4.58919777156725,2.1642693235075,0.151771975637563,6.30262254939053,0.886307409806464,0.123301229083017,2.89934954243064,3.42646048436613,5.92463293899457],"t":[-12.8749632028773,12.4363237090125,-8.70141956053028,8.65550405682937,8.41285737635809,8.28186784439158,8.1600709120311,7.84813770845603,7.58890826524923,7.47983929274138,7.27465481723276,-7.11317896372104,-6.91052714918789],"P.Value":[6.91981058631628e-07,9.17769175793039e-07,1.57684062975767e-05,1.64284062123445e-05,2.04644080887372e-05,2.30902803404745e-05,2.58689821103166e-05,3.48247066934915e-05,4.49026307017663e-05,5.00709023790009e-05,6.16644576052741e-05,7.28744148429394e-05,9.02316141103085e-05],"FDR":[0.0060389211767182,0.0060389211767182,0.0486336863673953,0.0486336863673953,0.0486336863673953,0.0486336863673953,0.0486336863673953,0.0572866425107935,0.0656576244483605,0.0658933075307652,0.073773114735037,0.0799189416110902,0.0913421570532046],"DE":[true,true,true,true,true,true,true,false,false,false,false,false,false]},"columns":[{"accessor":"gene_id","name":"Gene ID","type":"character","minWidth":160},{"accessor":"gene_name","name":"Gene","type":"character","style":{"fontStyle":"italic"}},{"accessor":"logFC","name":"logFC","type":"numeric","format":{"cell":{"digits":2},"aggregated":{"digits":2}},"maxWidth":100,"style":[{"color":"red"},{"color":"green"},{"color":"red"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"red"},{"color":"red"}]},{"accessor":"AveExpr","name":"AveExpr","type":"numeric","format":{"cell":{"digits":2},"aggregated":{"digits":2}},"maxWidth":100},{"accessor":"t","name":"t","type":"numeric","format":{"cell":{"digits":2},"aggregated":{"digits":2}},"maxWidth":100},{"accessor":"P.Value","name":"p","type":"numeric","cell":["6.92e-07","9.18e-07","1.58e-05","1.64e-05","2.05e-05","2.31e-05","2.59e-05","3.48e-05","4.49e-05","5.01e-05","6.17e-05","7.29e-05","9.02e-05"],"maxWidth":120},{"accessor":"FDR","name":"FDR","type":"numeric","cell":["6.04e-03","6.04e-03","0.049","0.049","0.049","0.049","0.049","0.057","0.066","0.066","0.074","0.080","0.091"],"maxWidth":120},{"accessor":"DE","name":"DE","type":"logical","cell":["&#10004;","&#10004;","&#10004;","&#10004;","&#10004;","&#10004;","&#10004;","❌","❌","❌","❌","❌","❌"],"html":true,"maxWidth":80,"style":[{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"red"},{"color":"red"},{"color":"red"},{"color":"red"},{"color":"red"},{"color":"red"}]}],"defaultPageSize":13,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"12d2883cd114ee8af3597f249fb86d30","key":"12d2883cd114ee8af3597f249fb86d30"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-d061dc21af5107df405e">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"gene_id":["ENSRNOG00000047551","ENSRNOG00000050004","ENSRNOG00000060849","ENSRNOG00000002802","ENSRNOG00000032626","ENSRNOG00000032832","ENSRNOG00000010278","ENSRNOG00000022839","ENSRNOG00000062228","ENSRNOG00000015992","ENSRNOG00000000239","ENSRNOG00000010797","ENSRNOG00000045989"],"gene_name":["Pnpla2","LOC100909761","Rcor2","Cxcl1","Mmp3","Mmp10","Il6","Ifit3","LOC100359515","Ccl20","Ccl7","Esm1","Hba-a3"],"logFC":[-7.39184764887098,6.25700520563667,-5.33729633417177,4.5305796848235,3.30484601386176,3.30585084762485,4.470051993425,2.9701469502195,4.56155751989565,3.94796308593642,2.42764842922466,-2.4836984748837,-2.32758566549567],"AveExpr":[0.129672036387214,-1.41670774802594,-1.30314428317846,1.90173917662942,4.58919777156725,2.1642693235075,0.151771975637563,6.30262254939053,0.886307409806464,0.123301229083017,2.89934954243064,3.42646048436613,5.92463293899457],"t":[-12.8749632028773,12.4363237090125,-8.70141956053028,8.65550405682937,8.41285737635809,8.28186784439158,8.1600709120311,7.84813770845603,7.58890826524923,7.47983929274138,7.27465481723276,-7.11317896372104,-6.91052714918789],"P.Value":[6.91981058631628e-07,9.17769175793039e-07,1.57684062975767e-05,1.64284062123445e-05,2.04644080887372e-05,2.30902803404745e-05,2.58689821103166e-05,3.48247066934915e-05,4.49026307017663e-05,5.00709023790009e-05,6.16644576052741e-05,7.28744148429394e-05,9.02316141103085e-05],"FDR":[0.0060389211767182,0.0060389211767182,0.0486336863673953,0.0486336863673953,0.0486336863673953,0.0486336863673953,0.0486336863673953,0.0572866425107935,0.0656576244483605,0.0658933075307652,0.073773114735037,0.0799189416110902,0.0913421570532046],"DE":[true,true,true,true,true,true,true,false,false,false,false,false,false]},"columns":[{"accessor":"gene_id","name":"Gene ID","type":"character","minWidth":160},{"accessor":"gene_name","name":"Gene","type":"character","style":{"fontStyle":"italic"}},{"accessor":"logFC","name":"logFC","type":"numeric","format":{"cell":{"digits":2},"aggregated":{"digits":2}},"maxWidth":100,"style":[{"color":"red"},{"color":"green"},{"color":"red"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"red"},{"color":"red"}]},{"accessor":"AveExpr","name":"AveExpr","type":"numeric","format":{"cell":{"digits":2},"aggregated":{"digits":2}},"maxWidth":100},{"accessor":"t","name":"t","type":"numeric","format":{"cell":{"digits":2},"aggregated":{"digits":2}},"maxWidth":100},{"accessor":"P.Value","name":"p","type":"numeric","cell":["6.92e-07","9.18e-07","1.58e-05","1.64e-05","2.05e-05","2.31e-05","2.59e-05","3.48e-05","4.49e-05","5.01e-05","6.17e-05","7.29e-05","9.02e-05"],"maxWidth":120},{"accessor":"FDR","name":"FDR","type":"numeric","cell":["6.04e-03","6.04e-03","0.049","0.049","0.049","0.049","0.049","0.057","0.066","0.066","0.074","0.080","0.091"],"maxWidth":120},{"accessor":"DE","name":"DE","type":"logical","cell":["&#10004;","&#10004;","&#10004;","&#10004;","&#10004;","&#10004;","&#10004;","❌","❌","❌","❌","❌","❌"],"html":true,"maxWidth":80,"style":[{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"green"},{"color":"red"},{"color":"red"},{"color":"red"},{"color":"red"},{"color":"red"},{"color":"red"}]}],"defaultPageSize":13,"paginationType":"numbers","showPageInfo":true,"minRows":1,"theme":{"style":{"fontSize":12}},"dataKey":"12d2883cd114ee8af3597f249fb86d30","key":"12d2883cd114ee8af3597f249fb86d30"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 <div id="ma-plot" class="section level2">
 <h2>MA Plot</h2>
 <pre class="r"><code>results %&gt;%
