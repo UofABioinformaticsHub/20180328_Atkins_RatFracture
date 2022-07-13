@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
   fig.align = "center",
-  fig.height = 7,
+  fig.height = 8,
   fig.width = 10
 )
 ```
@@ -333,7 +333,7 @@ results %>%
 
 ## Volcano Plot
 
-```{r volcano-plot, fig.cap = "Volcano plot with genes labelled to an FDR of 0.1. DE genes to an FDR threshold of 0.05 are highlighted in red."}
+```{r volcano-plot, fig.width=8, fig.cap = "Volcano plot with genes labelled to an FDR of 0.1. DE genes to an FDR threshold of 0.05 are highlighted in red."}
 results %>%
   ggplot(aes(logFC, -log10(P.Value))) +
   geom_point(aes(colour = DE),alpha = 0.5) +
@@ -380,6 +380,11 @@ results %>%
   facet_wrap(~gene_name) +
   labs(x = "Group", fill = "Group")
 ```
+
+```{r export-results}
+write_csv(results, here::here("output/top_table.csv"))
+```
+
 
 # Enrichment Analysis {.tabset}
 
@@ -430,7 +435,7 @@ gseaResults <- fgsea(gsByPathway, rankedGenes, BPPARAM = bpparam) %>%
 
 ```{r gsea-hallmark}
 df <- gseaResults %>% 
-  dplyr::filter(gs_cat == "H", padj < 0.05) %>% 
+  dplyr::filter(gs_cat == "H", padj < 0.01) %>% 
   mutate(
     leSize = vapply(leadingEdge, length, integer(1)),
    leadingEdge = vapply(
@@ -445,8 +450,8 @@ htmltools::tags$caption(
     glue(
       "
       All {nrow(df)} HALLMARK gene sets considered to be enriched in the ranked 
-      list of genes. 
-      All p-values are Bonferroni-adjusted. A Normalised Enrichment Score 
+      list of genes. All p-values are Bonferroni-adjusted with p < 0.01 used for 
+      significance. A Normalised Enrichment Score 
       (NES) > 0 indicates that the geneset was enriched amongst 
       up-regulated genes, whilst a negative NES indicates enrichment in the 
       down-regulated genes. Genes in the Leading Edge represent those which
@@ -506,6 +511,14 @@ p <- df %>%
   )
 plot_grid(plotlist = p)
 ```
+
+```{r export-hallmark}
+df %>% 
+  write_csv(
+    here::here("output/hallmark_gsea.csv")
+  )
+```
+
 
 ## Reactome Gene Sets {.tabset}
 
@@ -1097,3 +1110,4 @@ p <- df %>%
   )
 plot_grid(plotlist = p)
 ```
+
