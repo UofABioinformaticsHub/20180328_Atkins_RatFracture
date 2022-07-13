@@ -32,7 +32,7 @@ samples <- read_csv(
 
 ## Introduction
 
-This is a simple analysis of Single-End, Total RNA-Seq data associated with bone fractures in the diabetic rat model.
+This is a simple analysis of Single-End, Total RNA-Seq data associated with bone fractures in the Zucker Diabetic Fatty (ZDF) rat model.
 Samples are as follows.
 
 ```{r tbl-samples}
