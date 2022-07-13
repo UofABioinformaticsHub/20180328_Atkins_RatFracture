@@ -259,6 +259,7 @@ htmltools::tags$caption(
     )
   )
 )
+fs <- 12
 results %>% 
   dplyr::filter(FDR < 0.1) %>% 
   reactable(
@@ -306,7 +307,8 @@ results %>%
         },
         maxWidth = 80
       )
-    )
+    ),
+    theme = reactableTheme(style = list(fontSize = fs))
   )
 ```
 
