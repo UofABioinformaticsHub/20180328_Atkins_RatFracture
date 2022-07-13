@@ -37,6 +37,7 @@ library(msigdbr)
 library(fgsea)
 library(reactable)
 library(htmltools)
+library(BiocParallel)
 ```
 
 ```{r options}
@@ -49,6 +50,7 @@ sp <- "Rnorvegicus"
 with_tooltip <- function(value, width = 30) {
   tags$span(title = value, str_trunc(value, width))
 }
+bpparam <- MulticoreParam(ceiling(parallel::detectCores() / 2))
 ```
 
 
@@ -238,6 +240,77 @@ voomData$targets %>%
 Or the genes retained as confidently detected, `r sum(results$DE)` were formally considered as DE, using an FDR of 0.05.
 These were `r pander(dplyr::filter(results, DE)$gene_name)`.
 
+```{r result-table}
+htmltools::tags$caption(
+  htmltools::em(
+    glue(
+      "
+      All {sum(results$FDR < 0.1)} genes with an FDR < 0.1 for differential 
+      expression. Of these, only {sum(results$FDR < 0.05)} made the more formal 
+      criteria of an FDR < 0.05 for significant differential expression, as
+      indicated by the final column. Values in the logFC column represent the 
+      estimated change in expression on the log2 scale. The AveExpr column 
+      indicates the average expression level, with the most highly expressed 
+      gene in the dataset receiving a value of {round(max(results$AveExpr), 2)}. 
+      The lowest expressed gene which passed the criteria for detection received 
+      a value of {round(min(results$AveExpr), 2)}, marking this as the effective 
+      lower limit of detection.
+      "
+    )
+  )
+)
+results %>% 
+  dplyr::filter(FDR < 0.1) %>% 
+  reactable(
+    pagination = FALSE,
+    columns = list(
+      gene_id = colDef(name = "Gene ID", minWidth = 160),
+      gene_name = colDef(
+        name = "Gene",
+        style = list(fontStyle = "italic")
+        ),
+      logFC = colDef(
+        format = colFormat(digits = 2),
+        style = function(value) {
+          col <- ifelse(value > 0, "green", "red")
+          list(color = col)
+        },
+        maxWidth = 100
+      ),
+      AveExpr = colDef(
+        format = colFormat(digits = 2),
+        maxWidth = 100
+      ),
+      t = colDef(format = colFormat(digits = 2), maxWidth = 100),
+      P.Value = colDef(
+        name = "p",
+        cell = function(value) {
+          fmt <- ifelse(value < 0.01, "%.2e", "%.3f")
+          sprintf(fmt, value)
+        },
+        maxWidth = 120
+      ),
+      FDR = colDef(
+        cell = function(value) {
+          fmt <- ifelse(value < 0.01, "%.2e", "%.3f")
+          sprintf(fmt, value)
+        },
+        maxWidth = 120
+      ),
+      DE = colDef(
+        html = TRUE,
+        cell = function(value) ifelse(value, "&#10004;", "\u274c"),
+        style = function(value) {
+          col <- ifelse(value, "green", "red")
+          list(color = col)
+        },
+        maxWidth = 80
+      )
+    )
+  )
+```
+
+
 ## MA Plot
 
 ```{r ma-plot, fig.cap = "MA-plot showing all genes with an FDR < 0.1. Those passing the FDR threshold of 0.05 are highlighted in red."}
@@ -340,7 +413,7 @@ Only the `r comma(length(gsByPathway))` gene-sets with more than 5 genes detecte
 P-values obtained from GSEA were adjusted using Bonferroni's method to ensure strong control of the Family-Wise Error Rate (FWER).
 
 ```{r gsea-results}
-gseaResults <- fgsea(gsByPathway, rankedGenes) %>% 
+gseaResults <- fgsea(gsByPathway, rankedGenes, BPPARAM = bpparam) %>% 
   arrange(pval) %>% 
   mutate(padj = p.adjust(pval, "bonf")) %>% 
   dplyr::select(gs_name = pathway, pval, padj, NES, size, leadingEdge) %>% 
